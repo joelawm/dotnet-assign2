@@ -44,8 +44,6 @@
             this.OutputLabel = new System.Windows.Forms.Label();
             this.OutputTextbox = new System.Windows.Forms.TextBox();
             this.AddPropertyGroupBox = new System.Windows.Forms.GroupBox();
-            this.PersonTextbox = new System.Windows.Forms.TextBox();
-            this.ResidenceTextbox = new System.Windows.Forms.TextBox();
             this.StreetAddressLabel = new System.Windows.Forms.Label();
             this.StreetAddressTextbox = new System.Windows.Forms.TextBox();
             this.AptNumTextbox = new System.Windows.Forms.TextBox();
@@ -66,6 +64,8 @@
             this.BuyPropertyButton = new System.Windows.Forms.Button();
             this.AddResidentButton = new System.Windows.Forms.Button();
             this.RemoveResidentButton = new System.Windows.Forms.Button();
+            this.PersonListbox = new System.Windows.Forms.ListBox();
+            this.ResidenceListbox = new System.Windows.Forms.ListBox();
             this.CommunitiesGroupBox.SuspendLayout();
             this.ANRGroupBox.SuspendLayout();
             this.AddPropertyGroupBox.SuspendLayout();
@@ -110,6 +110,7 @@
             this.DekalbRadioButton.TabStop = true;
             this.DekalbRadioButton.Text = "Dekalb";
             this.DekalbRadioButton.UseVisualStyleBackColor = true;
+            this.DekalbRadioButton.Click += new System.EventHandler(this.DekalbRadioButton_Click);
             // 
             // ANRGroupBox
             // 
@@ -228,7 +229,7 @@
             this.OutputTextbox.Location = new System.Drawing.Point(12, 499);
             this.OutputTextbox.Multiline = true;
             this.OutputTextbox.Name = "OutputTextbox";
-            this.OutputTextbox.Size = new System.Drawing.Size(935, 120);
+            this.OutputTextbox.Size = new System.Drawing.Size(988, 120);
             this.OutputTextbox.TabIndex = 3;
             // 
             // AddPropertyGroupBox
@@ -254,22 +255,6 @@
             this.AddPropertyGroupBox.TabIndex = 4;
             this.AddPropertyGroupBox.TabStop = false;
             this.AddPropertyGroupBox.Text = "Add Property";
-            // 
-            // PersonTextbox
-            // 
-            this.PersonTextbox.Location = new System.Drawing.Point(492, 32);
-            this.PersonTextbox.Multiline = true;
-            this.PersonTextbox.Name = "PersonTextbox";
-            this.PersonTextbox.Size = new System.Drawing.Size(221, 461);
-            this.PersonTextbox.TabIndex = 5;
-            // 
-            // ResidenceTextbox
-            // 
-            this.ResidenceTextbox.Location = new System.Drawing.Point(719, 32);
-            this.ResidenceTextbox.Multiline = true;
-            this.ResidenceTextbox.Name = "ResidenceTextbox";
-            this.ResidenceTextbox.Size = new System.Drawing.Size(228, 461);
-            this.ResidenceTextbox.TabIndex = 6;
             // 
             // StreetAddressLabel
             // 
@@ -500,19 +485,39 @@
             this.RemoveResidentButton.Text = "Remove Resident";
             this.RemoveResidentButton.UseVisualStyleBackColor = true;
             // 
+            // PersonListbox
+            // 
+            this.PersonListbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PersonListbox.FormattingEnabled = true;
+            this.PersonListbox.ItemHeight = 15;
+            this.PersonListbox.Location = new System.Drawing.Point(492, 32);
+            this.PersonListbox.Name = "PersonListbox";
+            this.PersonListbox.Size = new System.Drawing.Size(221, 454);
+            this.PersonListbox.TabIndex = 13;
+            // 
+            // ResidenceListbox
+            // 
+            this.ResidenceListbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ResidenceListbox.FormattingEnabled = true;
+            this.ResidenceListbox.ItemHeight = 15;
+            this.ResidenceListbox.Location = new System.Drawing.Point(719, 32);
+            this.ResidenceListbox.Name = "ResidenceListbox";
+            this.ResidenceListbox.Size = new System.Drawing.Size(281, 454);
+            this.ResidenceListbox.TabIndex = 14;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(959, 631);
+            this.ClientSize = new System.Drawing.Size(1012, 631);
+            this.Controls.Add(this.ResidenceListbox);
+            this.Controls.Add(this.PersonListbox);
             this.Controls.Add(this.RemoveResidentButton);
             this.Controls.Add(this.AddResidentButton);
             this.Controls.Add(this.BuyPropertyButton);
             this.Controls.Add(this.ForSaleButton);
             this.Controls.Add(this.ResidenceOutputLabel);
             this.Controls.Add(this.PersonOutputLabel);
-            this.Controls.Add(this.ResidenceTextbox);
-            this.Controls.Add(this.PersonTextbox);
             this.Controls.Add(this.AddPropertyGroupBox);
             this.Controls.Add(this.OutputTextbox);
             this.Controls.Add(this.OutputLabel);
@@ -553,8 +558,6 @@
         private System.Windows.Forms.TextBox OccupationTextbox;
         private System.Windows.Forms.Label OccupationLabel;
         private System.Windows.Forms.TextBox NameTextbox;
-        private System.Windows.Forms.TextBox PersonTextbox;
-        private System.Windows.Forms.TextBox ResidenceTextbox;
         private System.Windows.Forms.TextBox AptNumTextbox;
         private System.Windows.Forms.TextBox StreetAddressTextbox;
         private System.Windows.Forms.Label StreetAddressLabel;
@@ -575,6 +578,8 @@
         private System.Windows.Forms.Button BuyPropertyButton;
         private System.Windows.Forms.Button AddResidentButton;
         private System.Windows.Forms.Button RemoveResidentButton;
+        private System.Windows.Forms.ListBox PersonListbox;
+        private System.Windows.Forms.ListBox ResidenceListbox;
     }
 }
 

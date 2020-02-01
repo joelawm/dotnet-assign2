@@ -24,5 +24,10 @@ namespace Assign_2
         {
             InitializeComponent();
         }
+
+        private void DekalbRadioButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
