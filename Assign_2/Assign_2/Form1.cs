@@ -1,10 +1,11 @@
 ﻿/*
  * Name: Huajian Huang; zid: z1869893
  * Partner: Joseph Meyer; zid: z1788150
- *
+ * 
  * CSCI 473 - Assignment 2
  * Function: The main fucntion of this program is to create a piece of software that allows the managment of properties in DeKalb but now with a GUI.
- * */
+ * 
+ */
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,6 +24,5 @@ namespace Assign_2
         {
             InitializeComponent();
         }
-
     }
 }
