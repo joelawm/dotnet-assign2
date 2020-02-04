@@ -44,22 +44,22 @@
             this.OutputLabel = new System.Windows.Forms.Label();
             this.OutputTextbox = new System.Windows.Forms.TextBox();
             this.AddPropertyGroupBox = new System.Windows.Forms.GroupBox();
-            this.StreetAddressLabel = new System.Windows.Forms.Label();
-            this.StreetAddressTextbox = new System.Windows.Forms.TextBox();
+            this.FloorsUpDown = new System.Windows.Forms.NumericUpDown();
+            this.BathsUpDown = new System.Windows.Forms.NumericUpDown();
+            this.BedroomsUpDown = new System.Windows.Forms.NumericUpDown();
+            this.GarageCheckbox = new System.Windows.Forms.CheckBox();
+            this.GAddPropertyButton = new System.Windows.Forms.Button();
+            this.FloorsLabel = new System.Windows.Forms.Label();
+            this.BathsLabel = new System.Windows.Forms.Label();
+            this.BedroomsLabel = new System.Windows.Forms.Label();
+            this.SquareFtUpDown = new System.Windows.Forms.NumericUpDown();
+            this.AptLabel = new System.Windows.Forms.Label();
+            this.SquareFtLabel = new System.Windows.Forms.Label();
             this.AptNumTextbox = new System.Windows.Forms.TextBox();
+            this.StreetAddressTextbox = new System.Windows.Forms.TextBox();
+            this.StreetAddressLabel = new System.Windows.Forms.Label();
             this.PersonOutputLabel = new System.Windows.Forms.Label();
             this.ResidenceOutputLabel = new System.Windows.Forms.Label();
-            this.SquareFtLabel = new System.Windows.Forms.Label();
-            this.AptLabel = new System.Windows.Forms.Label();
-            this.SquareFtUpDown = new System.Windows.Forms.NumericUpDown();
-            this.BedroomsLabel = new System.Windows.Forms.Label();
-            this.BathsLabel = new System.Windows.Forms.Label();
-            this.FloorsLabel = new System.Windows.Forms.Label();
-            this.GAddPropertyButton = new System.Windows.Forms.Button();
-            this.GarageCheckbox = new System.Windows.Forms.CheckBox();
-            this.BedroomsUpDown = new System.Windows.Forms.NumericUpDown();
-            this.BathsUpDown = new System.Windows.Forms.NumericUpDown();
-            this.FloorsUpDown = new System.Windows.Forms.NumericUpDown();
             this.ForSaleButton = new System.Windows.Forms.Button();
             this.BuyPropertyButton = new System.Windows.Forms.Button();
             this.AddResidentButton = new System.Windows.Forms.Button();
@@ -69,10 +69,10 @@
             this.CommunitiesGroupBox.SuspendLayout();
             this.ANRGroupBox.SuspendLayout();
             this.AddPropertyGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SquareFtUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BedroomsUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BathsUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FloorsUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BathsUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BedroomsUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SquareFtUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // CommunitiesGroupBox
@@ -256,154 +256,19 @@
             this.AddPropertyGroupBox.TabStop = false;
             this.AddPropertyGroupBox.Text = "Add Property";
             // 
-            // StreetAddressLabel
+            // FloorsUpDown
             // 
-            this.StreetAddressLabel.AutoSize = true;
-            this.StreetAddressLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.StreetAddressLabel.Location = new System.Drawing.Point(6, 25);
-            this.StreetAddressLabel.Name = "StreetAddressLabel";
-            this.StreetAddressLabel.Size = new System.Drawing.Size(105, 18);
-            this.StreetAddressLabel.TabIndex = 7;
-            this.StreetAddressLabel.Text = "Street Address";
-            // 
-            // StreetAddressTextbox
-            // 
-            this.StreetAddressTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.StreetAddressTextbox.Location = new System.Drawing.Point(6, 47);
-            this.StreetAddressTextbox.Name = "StreetAddressTextbox";
-            this.StreetAddressTextbox.Size = new System.Drawing.Size(156, 24);
-            this.StreetAddressTextbox.TabIndex = 8;
-            // 
-            // AptNumTextbox
-            // 
-            this.AptNumTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.AptNumTextbox.Location = new System.Drawing.Point(168, 47);
-            this.AptNumTextbox.Name = "AptNumTextbox";
-            this.AptNumTextbox.Size = new System.Drawing.Size(45, 24);
-            this.AptNumTextbox.TabIndex = 9;
-            // 
-            // PersonOutputLabel
-            // 
-            this.PersonOutputLabel.AutoSize = true;
-            this.PersonOutputLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
-            this.PersonOutputLabel.Location = new System.Drawing.Point(488, 5);
-            this.PersonOutputLabel.Name = "PersonOutputLabel";
-            this.PersonOutputLabel.Size = new System.Drawing.Size(76, 24);
-            this.PersonOutputLabel.TabIndex = 7;
-            this.PersonOutputLabel.Text = "Person";
-            // 
-            // ResidenceOutputLabel
-            // 
-            this.ResidenceOutputLabel.AutoSize = true;
-            this.ResidenceOutputLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.5F, System.Drawing.FontStyle.Bold);
-            this.ResidenceOutputLabel.Location = new System.Drawing.Point(715, 7);
-            this.ResidenceOutputLabel.Name = "ResidenceOutputLabel";
-            this.ResidenceOutputLabel.Size = new System.Drawing.Size(232, 22);
-            this.ResidenceOutputLabel.TabIndex = 8;
-            this.ResidenceOutputLabel.Text = "Residence (*==For Sale)";
-            // 
-            // SquareFtLabel
-            // 
-            this.SquareFtLabel.AutoSize = true;
-            this.SquareFtLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.SquareFtLabel.Location = new System.Drawing.Point(6, 79);
-            this.SquareFtLabel.Name = "SquareFtLabel";
-            this.SquareFtLabel.Size = new System.Drawing.Size(114, 18);
-            this.SquareFtLabel.TabIndex = 10;
-            this.SquareFtLabel.Text = "Square Footage";
-            // 
-            // AptLabel
-            // 
-            this.AptLabel.AutoSize = true;
-            this.AptLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.AptLabel.Location = new System.Drawing.Point(165, 26);
-            this.AptLabel.Name = "AptLabel";
-            this.AptLabel.Size = new System.Drawing.Size(45, 18);
-            this.AptLabel.TabIndex = 11;
-            this.AptLabel.Text = "Apt. #";
-            // 
-            // SquareFtUpDown
-            // 
-            this.SquareFtUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.SquareFtUpDown.Location = new System.Drawing.Point(6, 102);
-            this.SquareFtUpDown.Maximum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.SquareFtUpDown.Name = "SquareFtUpDown";
-            this.SquareFtUpDown.Size = new System.Drawing.Size(76, 24);
-            this.SquareFtUpDown.TabIndex = 12;
-            this.SquareFtUpDown.Value = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            // 
-            // BedroomsLabel
-            // 
-            this.BedroomsLabel.AutoSize = true;
-            this.BedroomsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.BedroomsLabel.Location = new System.Drawing.Point(6, 133);
-            this.BedroomsLabel.Name = "BedroomsLabel";
-            this.BedroomsLabel.Size = new System.Drawing.Size(78, 18);
-            this.BedroomsLabel.TabIndex = 13;
-            this.BedroomsLabel.Text = "Bedrooms";
-            // 
-            // BathsLabel
-            // 
-            this.BathsLabel.AutoSize = true;
-            this.BathsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.BathsLabel.Location = new System.Drawing.Point(90, 133);
-            this.BathsLabel.Name = "BathsLabel";
-            this.BathsLabel.Size = new System.Drawing.Size(46, 18);
-            this.BathsLabel.TabIndex = 14;
-            this.BathsLabel.Text = "Baths";
-            // 
-            // FloorsLabel
-            // 
-            this.FloorsLabel.AutoSize = true;
-            this.FloorsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.FloorsLabel.Location = new System.Drawing.Point(142, 133);
-            this.FloorsLabel.Name = "FloorsLabel";
-            this.FloorsLabel.Size = new System.Drawing.Size(51, 18);
-            this.FloorsLabel.TabIndex = 15;
-            this.FloorsLabel.Text = "Floors";
-            // 
-            // GAddPropertyButton
-            // 
-            this.GAddPropertyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.GAddPropertyButton.Location = new System.Drawing.Point(150, 248);
-            this.GAddPropertyButton.Name = "GAddPropertyButton";
-            this.GAddPropertyButton.Size = new System.Drawing.Size(75, 32);
-            this.GAddPropertyButton.TabIndex = 9;
-            this.GAddPropertyButton.Text = "Add";
-            this.GAddPropertyButton.UseVisualStyleBackColor = true;
-            // 
-            // GarageCheckbox
-            // 
-            this.GarageCheckbox.AutoSize = true;
-            this.GarageCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.GarageCheckbox.Location = new System.Drawing.Point(18, 208);
-            this.GarageCheckbox.Name = "GarageCheckbox";
-            this.GarageCheckbox.Size = new System.Drawing.Size(84, 22);
-            this.GarageCheckbox.TabIndex = 16;
-            this.GarageCheckbox.Text = "Garage?";
-            this.GarageCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // BedroomsUpDown
-            // 
-            this.BedroomsUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.BedroomsUpDown.Location = new System.Drawing.Point(9, 154);
-            this.BedroomsUpDown.Maximum = new decimal(new int[] {
+            this.FloorsUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.FloorsUpDown.Location = new System.Drawing.Point(145, 155);
+            this.FloorsUpDown.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.BedroomsUpDown.Name = "BedroomsUpDown";
-            this.BedroomsUpDown.Size = new System.Drawing.Size(42, 24);
-            this.BedroomsUpDown.TabIndex = 17;
-            this.BedroomsUpDown.Value = new decimal(new int[] {
+            this.FloorsUpDown.Name = "FloorsUpDown";
+            this.FloorsUpDown.Size = new System.Drawing.Size(42, 24);
+            this.FloorsUpDown.TabIndex = 19;
+            this.FloorsUpDown.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -427,23 +292,158 @@
             0,
             0});
             // 
-            // FloorsUpDown
+            // BedroomsUpDown
             // 
-            this.FloorsUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.FloorsUpDown.Location = new System.Drawing.Point(145, 155);
-            this.FloorsUpDown.Maximum = new decimal(new int[] {
+            this.BedroomsUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.BedroomsUpDown.Location = new System.Drawing.Point(9, 154);
+            this.BedroomsUpDown.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.FloorsUpDown.Name = "FloorsUpDown";
-            this.FloorsUpDown.Size = new System.Drawing.Size(42, 24);
-            this.FloorsUpDown.TabIndex = 19;
-            this.FloorsUpDown.Value = new decimal(new int[] {
+            this.BedroomsUpDown.Name = "BedroomsUpDown";
+            this.BedroomsUpDown.Size = new System.Drawing.Size(42, 24);
+            this.BedroomsUpDown.TabIndex = 17;
+            this.BedroomsUpDown.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
+            // 
+            // GarageCheckbox
+            // 
+            this.GarageCheckbox.AutoSize = true;
+            this.GarageCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.GarageCheckbox.Location = new System.Drawing.Point(18, 208);
+            this.GarageCheckbox.Name = "GarageCheckbox";
+            this.GarageCheckbox.Size = new System.Drawing.Size(84, 22);
+            this.GarageCheckbox.TabIndex = 16;
+            this.GarageCheckbox.Text = "Garage?";
+            this.GarageCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // GAddPropertyButton
+            // 
+            this.GAddPropertyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.GAddPropertyButton.Location = new System.Drawing.Point(150, 248);
+            this.GAddPropertyButton.Name = "GAddPropertyButton";
+            this.GAddPropertyButton.Size = new System.Drawing.Size(75, 32);
+            this.GAddPropertyButton.TabIndex = 9;
+            this.GAddPropertyButton.Text = "Add";
+            this.GAddPropertyButton.UseVisualStyleBackColor = true;
+            // 
+            // FloorsLabel
+            // 
+            this.FloorsLabel.AutoSize = true;
+            this.FloorsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.FloorsLabel.Location = new System.Drawing.Point(142, 133);
+            this.FloorsLabel.Name = "FloorsLabel";
+            this.FloorsLabel.Size = new System.Drawing.Size(51, 18);
+            this.FloorsLabel.TabIndex = 15;
+            this.FloorsLabel.Text = "Floors";
+            // 
+            // BathsLabel
+            // 
+            this.BathsLabel.AutoSize = true;
+            this.BathsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.BathsLabel.Location = new System.Drawing.Point(90, 133);
+            this.BathsLabel.Name = "BathsLabel";
+            this.BathsLabel.Size = new System.Drawing.Size(46, 18);
+            this.BathsLabel.TabIndex = 14;
+            this.BathsLabel.Text = "Baths";
+            // 
+            // BedroomsLabel
+            // 
+            this.BedroomsLabel.AutoSize = true;
+            this.BedroomsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.BedroomsLabel.Location = new System.Drawing.Point(6, 133);
+            this.BedroomsLabel.Name = "BedroomsLabel";
+            this.BedroomsLabel.Size = new System.Drawing.Size(78, 18);
+            this.BedroomsLabel.TabIndex = 13;
+            this.BedroomsLabel.Text = "Bedrooms";
+            // 
+            // SquareFtUpDown
+            // 
+            this.SquareFtUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.SquareFtUpDown.Location = new System.Drawing.Point(6, 102);
+            this.SquareFtUpDown.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.SquareFtUpDown.Name = "SquareFtUpDown";
+            this.SquareFtUpDown.Size = new System.Drawing.Size(76, 24);
+            this.SquareFtUpDown.TabIndex = 12;
+            this.SquareFtUpDown.Value = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            // 
+            // AptLabel
+            // 
+            this.AptLabel.AutoSize = true;
+            this.AptLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.AptLabel.Location = new System.Drawing.Point(165, 26);
+            this.AptLabel.Name = "AptLabel";
+            this.AptLabel.Size = new System.Drawing.Size(45, 18);
+            this.AptLabel.TabIndex = 11;
+            this.AptLabel.Text = "Apt. #";
+            // 
+            // SquareFtLabel
+            // 
+            this.SquareFtLabel.AutoSize = true;
+            this.SquareFtLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.SquareFtLabel.Location = new System.Drawing.Point(6, 79);
+            this.SquareFtLabel.Name = "SquareFtLabel";
+            this.SquareFtLabel.Size = new System.Drawing.Size(114, 18);
+            this.SquareFtLabel.TabIndex = 10;
+            this.SquareFtLabel.Text = "Square Footage";
+            // 
+            // AptNumTextbox
+            // 
+            this.AptNumTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.AptNumTextbox.Location = new System.Drawing.Point(168, 47);
+            this.AptNumTextbox.Name = "AptNumTextbox";
+            this.AptNumTextbox.Size = new System.Drawing.Size(45, 24);
+            this.AptNumTextbox.TabIndex = 9;
+            // 
+            // StreetAddressTextbox
+            // 
+            this.StreetAddressTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.StreetAddressTextbox.Location = new System.Drawing.Point(6, 47);
+            this.StreetAddressTextbox.Name = "StreetAddressTextbox";
+            this.StreetAddressTextbox.Size = new System.Drawing.Size(156, 24);
+            this.StreetAddressTextbox.TabIndex = 8;
+            // 
+            // StreetAddressLabel
+            // 
+            this.StreetAddressLabel.AutoSize = true;
+            this.StreetAddressLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.StreetAddressLabel.Location = new System.Drawing.Point(6, 25);
+            this.StreetAddressLabel.Name = "StreetAddressLabel";
+            this.StreetAddressLabel.Size = new System.Drawing.Size(105, 18);
+            this.StreetAddressLabel.TabIndex = 7;
+            this.StreetAddressLabel.Text = "Street Address";
+            // 
+            // PersonOutputLabel
+            // 
+            this.PersonOutputLabel.AutoSize = true;
+            this.PersonOutputLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
+            this.PersonOutputLabel.Location = new System.Drawing.Point(488, 5);
+            this.PersonOutputLabel.Name = "PersonOutputLabel";
+            this.PersonOutputLabel.Size = new System.Drawing.Size(76, 24);
+            this.PersonOutputLabel.TabIndex = 7;
+            this.PersonOutputLabel.Text = "Person";
+            // 
+            // ResidenceOutputLabel
+            // 
+            this.ResidenceOutputLabel.AutoSize = true;
+            this.ResidenceOutputLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.5F, System.Drawing.FontStyle.Bold);
+            this.ResidenceOutputLabel.Location = new System.Drawing.Point(715, 7);
+            this.ResidenceOutputLabel.Name = "ResidenceOutputLabel";
+            this.ResidenceOutputLabel.Size = new System.Drawing.Size(232, 22);
+            this.ResidenceOutputLabel.TabIndex = 8;
+            this.ResidenceOutputLabel.Text = "Residence (*==For Sale)";
             // 
             // ForSaleButton
             // 
@@ -525,16 +525,17 @@
             this.Controls.Add(this.CommunitiesGroupBox);
             this.Name = "Form1";
             this.Text = "Real Estate Management Application";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.CommunitiesGroupBox.ResumeLayout(false);
             this.CommunitiesGroupBox.PerformLayout();
             this.ANRGroupBox.ResumeLayout(false);
             this.ANRGroupBox.PerformLayout();
             this.AddPropertyGroupBox.ResumeLayout(false);
             this.AddPropertyGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SquareFtUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BedroomsUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BathsUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FloorsUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BathsUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BedroomsUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SquareFtUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
