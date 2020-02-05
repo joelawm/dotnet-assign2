@@ -22,247 +22,59 @@ namespace Assign_2
 
     public partial class Form1 : Form
     {
-        //input data for Deklab and Sycamore 
-        private const string DekalbPersonFile = "../../dp.txt";
-        private const string DekalbHouseFile = "../../dh.txt";
-        private const string DekalbApartmentFile = "../../da.txt";
-        private const string SycamorePersonFile = "../../sp.txt";
-        private const string SycamoreHouseFile = "../../sh.txt";
-        private const string SycamoreApartmentFile = "../../sa.txt";
-
+        private static ActiveSycamore activeSycamore;
+        private static ActiveDekalb activeDekalb;
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void DekalbRadioButton_Click(object sender, EventArgs e)
+        protected void CommunityListShowing(Community comm)
         {
+            foreach (var res in comm.Residents)
+                PersonListbox.Items.Add(res.FirstName +
+                                        "\t\t" +
+                                        (DateTime.Now.Year - res.Birthday.Year) +
+                                        '\t' +
+                                        res.Occupation);
 
+            ResidenceListbox.Items.Add("House");
+            ResidenceListbox.Items.Add("-----------------");
+            foreach (var property in comm.Props)
+                if (property as House != null)
+                    if (property.ForSale)
+                        ResidenceListbox.Items.Add(property.StreetAddr + '*');
+                    else
+                        ResidenceListbox.Items.Add(property.StreetAddr);
+
+            ResidenceListbox.Items.Add("");
+            ResidenceListbox.Items.Add("Apartment");
+            ResidenceListbox.Items.Add("-----------------");
+            foreach (var property in comm.Props)
+                if (property as Apartment != null)
+                    if (property.ForSale)
+                        ResidenceListbox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit + '*');
+                    else
+                        ResidenceListbox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        protected void ComunityListBoxClear()
         {
-            //Dekalb and Sycamore Community
-            Community DekalbCommunity = new Community(99999, "DeKalb", 0);
-            Community SycamoreCommunity = new Community(99999, "DeKalb", 0);
+            PersonListbox.Items.Clear();
+            ResidenceListbox.Items.Clear();
+        }
+        private void DekalbRadioButton_Click(object sender, EventArgs e)
+        {
+            ComunityListBoxClear();
+            activeDekalb = new ActiveDekalb();
+            CommunityListShowing(activeDekalb.ActiveDekalb_Files());
+        }
 
-            // if PersonFile exists
-            if (File.Exists(DekalbPersonFile))
-            {
-                // PersonFile declares here
-                using (StreamReader sr = File.OpenText(DekalbPersonFile))
-                {
-                    // Split the data by '\n' and save them as 1d array
-                    string[] input = sr.ReadToEnd().Split('\n');
-                    int i = 0;
-
-                    do
-                    {
-                        // Split the data from input[] and save them in iInput[]
-                        string[] iInput = input[i].Split('\t');
-
-                        var id = UInt32.Parse(iInput[0]);
-                        var lName = iInput[1];
-                        var fName = iInput[2];
-                        var occ = iInput[3];
-                        var year = Int32.Parse(iInput[4]);
-                        var month = Int32.Parse(iInput[5]);
-                        var day = Int32.Parse(iInput[6]);
-                        var dt = new DateTime(year, month, day);
-                        var resId = iInput[7];
-
-                        DekalbCommunity.Residents.Add(new Person(id, dt, lName, fName, occ, resId));
-                        i++;
-                    } while (i < input.Length); // if i less than input[]'s length
-
-                    sr.Close();
-                }
-            }
-
-            // if HouseFile exists
-            if (File.Exists(DekalbHouseFile))
-            {
-                using (StreamReader sr = File.OpenText(DekalbHouseFile))
-                {
-                    // split data by '\n' and save them in input array
-                    string[] input = sr.ReadToEnd().Split('\n');
-                    int i = 0;
-
-                    do
-                    {
-                        // split data by '\t' and save them in iInput array
-                        string[] iInput = input[i].Split('\t');
-                        var id = UInt32.Parse(iInput[0]);
-                        var oId = UInt32.Parse(iInput[1]);
-                        var x = UInt32.Parse(iInput[2]);
-                        var y = UInt32.Parse(iInput[3]);
-                        var stAddr = iInput[4];
-                        var city = iInput[5];
-                        var state = iInput[6];
-                        var zip = iInput[7];
-                        var forSale = iInput[8].Equals("T");
-                        var bedRoom = UInt32.Parse(iInput[9]);
-                        var bath = UInt32.Parse(iInput[10]);
-                        var sqft = UInt32.Parse(iInput[11]);
-                        var garage = iInput[12].Equals("T");
-                        var aGarage = iInput[13].Equals("T");
-                        var floor = UInt32.Parse(iInput[14]);
-
-                        House house = new House(id, x, y, oId, stAddr, city, state,
-                            zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
-                        DekalbCommunity.Props.Add(house);
-                        i++;
-                    } while (i < input.Length); // if i less than input array's length
-
-                    sr.Close();
-                }
-            }
-
-            // if ApartmentFile exists
-            if (File.Exists(DekalbApartmentFile))
-            {
-                using (StreamReader sr = File.OpenText(DekalbApartmentFile))
-                {
-                    // split data by '\n' and save them in input array
-                    string[] input = sr.ReadToEnd().Split('\n');
-                    int i = 0;
-
-                    do
-                    {
-                        // split data by '\t' and save them in input array
-                        string[] iInput = input[i].Split('\t');
-                        var id = UInt32.Parse(iInput[0]);
-                        var oId = UInt32.Parse(iInput[1]);
-                        var x = UInt32.Parse(iInput[2]);
-                        var y = UInt32.Parse(iInput[3]);
-                        var stAddr = iInput[4];
-                        var city = iInput[5];
-                        var state = iInput[6];
-                        var zip = iInput[7];
-                        var forSale = iInput[8].Equals("T");
-                        var bedRoom = UInt32.Parse(iInput[9]);
-                        var bath = UInt32.Parse(iInput[10]);
-                        var sqft = UInt32.Parse(iInput[11]);
-                        var unit = iInput[12];
-
-                        Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom,
-                            bath, sqft, unit);
-                        DekalbCommunity.Props.Add(apartment);
-                        i++;
-                    } while (i < input.Length); // do if i less than input array's length
-
-                    sr.Close();
-                }
-            }
-
-            // if PersonFile exists
-            if (File.Exists(SycamorePersonFile))
-            {
-                // PersonFile declares here
-                using (StreamReader sr = File.OpenText(SycamorePersonFile))
-                {
-                    // Split the data by '\n' and save them as 1d array
-                    string[] input = sr.ReadToEnd().Split('\n');
-                    int i = 0;
-
-                    do
-                    {
-                        // Split the data from input[] and save them in iInput[]
-                        string[] iInput = input[i].Split('\t');
-
-                        var id = UInt32.Parse(iInput[0]);
-                        var lName = iInput[1];
-                        var fName = iInput[2];
-                        var occ = iInput[3];
-                        var year = Int32.Parse(iInput[4]);
-                        var month = Int32.Parse(iInput[5]);
-                        var day = Int32.Parse(iInput[6]);
-                        var dt = new DateTime(year, month, day);
-                        var resId = iInput[7];
-
-                        SycamoreCommunity.Residents.Add(new Person(id, dt, lName, fName, occ, resId));
-                        i++;
-                    } while (i < input.Length); // if i less than input[]'s length
-
-                    sr.Close();
-                }
-            }
-
-            // if HouseFile exists
-            if (File.Exists(SycamoreHouseFile))
-            {
-                using (StreamReader sr = File.OpenText(SycamoreHouseFile))
-                {
-                    // split data by '\n' and save them in input array
-                    string[] input = sr.ReadToEnd().Split('\n');
-                    int i = 0;
-
-                    do
-                    {
-                        // split data by '\t' and save them in iInput array
-                        string[] iInput = input[i].Split('\t');
-                        var id = UInt32.Parse(iInput[0]);
-                        var oId = UInt32.Parse(iInput[1]);
-                        var x = UInt32.Parse(iInput[2]);
-                        var y = UInt32.Parse(iInput[3]);
-                        var stAddr = iInput[4];
-                        var city = iInput[5];
-                        var state = iInput[6];
-                        var zip = iInput[7];
-                        var forSale = iInput[8].Equals("T");
-                        var bedRoom = UInt32.Parse(iInput[9]);
-                        var bath = UInt32.Parse(iInput[10]);
-                        var sqft = UInt32.Parse(iInput[11]);
-                        var garage = iInput[12].Equals("T");
-                        var aGarage = iInput[13].Equals("T");
-                        var floor = UInt32.Parse(iInput[14]);
-
-                        House house = new House(id, x, y, oId, stAddr, city, state,
-                            zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
-                        SycamoreCommunity.Props.Add(house);
-                        i++;
-                    } while (i < input.Length); // if i less than input array's length
-
-                    sr.Close();
-                }
-            }
-
-            // if ApartmentFile exists
-            if (File.Exists(SycamoreApartmentFile))
-            {
-                using (StreamReader sr = File.OpenText(SycamoreApartmentFile))
-                {
-                    // split data by '\n' and save them in input array
-                    string[] input = sr.ReadToEnd().Split('\n');
-                    int i = 0;
-
-                    do
-                    {
-                        // split data by '\t' and save them in input array
-                        string[] iInput = input[i].Split('\t');
-                        var id = UInt32.Parse(iInput[0]);
-                        var oId = UInt32.Parse(iInput[1]);
-                        var x = UInt32.Parse(iInput[2]);
-                        var y = UInt32.Parse(iInput[3]);
-                        var stAddr = iInput[4];
-                        var city = iInput[5];
-                        var state = iInput[6];
-                        var zip = iInput[7];
-                        var forSale = iInput[8].Equals("T");
-                        var bedRoom = UInt32.Parse(iInput[9]);
-                        var bath = UInt32.Parse(iInput[10]);
-                        var sqft = UInt32.Parse(iInput[11]);
-                        var unit = iInput[12];
-
-                        Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom,
-                            bath, sqft, unit);
-                        SycamoreCommunity.Props.Add(apartment);
-                        i++;
-                    } while (i < input.Length); // do if i less than input array's length
-
-                    sr.Close();
-                }
-            }
+        private void SycamoreRadioButton_Click(object sender, EventArgs e)
+        {
+            ComunityListBoxClear();
+            activeSycamore = new ActiveSycamore();
+            CommunityListShowing(activeSycamore.ActiveSycamore_Files());
         }
     }
 }
