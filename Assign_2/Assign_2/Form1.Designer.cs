@@ -525,7 +525,6 @@
             this.Controls.Add(this.CommunitiesGroupBox);
             this.Name = "Form1";
             this.Text = "Real Estate Management Application";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.CommunitiesGroupBox.ResumeLayout(false);
             this.CommunitiesGroupBox.PerformLayout();
             this.ANRGroupBox.ResumeLayout(false);
