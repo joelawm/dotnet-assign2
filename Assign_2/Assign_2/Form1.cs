@@ -25,20 +25,16 @@ namespace Assign_2
         private void CommunityListShowing(Community comm)
         {
             foreach (var res in comm.Residents)
-                PersonListbox.Items.Add(res.FirstName +
-                                        "\t\t" +
-                                        (DateTime.Now.Year - res.Birthday.Year) +
-                                        '\t' +
-                                        res.Occupation);
+                PersonListbox.Items.Add(String.Format("{0}\t{1}\t{2}", res.FirstName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
 
             ResidenceListbox.Items.Add("House");
             ResidenceListbox.Items.Add("-----------------");
             foreach (var property in comm.Props)
                 if (property as House != null)
                     if (property.ForSale)
-                        ResidenceListbox.Items.Add(property.StreetAddr + '*');
+                        ResidenceListbox.Items.Add(String.Format("{0}  *", property.StreetAddr));
                     else
-                        ResidenceListbox.Items.Add(property.StreetAddr);
+                        ResidenceListbox.Items.Add(String.Format("{0}", property.StreetAddr));
 
             ResidenceListbox.Items.Add("");
             ResidenceListbox.Items.Add("Apartment");
@@ -46,9 +42,9 @@ namespace Assign_2
             foreach (var property in comm.Props)
                 if (property as Apartment != null)
                     if (property.ForSale)
-                        ResidenceListbox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit + '*');
+                        ResidenceListbox.Items.Add(String.Format("{0}  #  {1}  *", property.StreetAddr, ((Apartment)property).Unit));
                     else
-                        ResidenceListbox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit);
+                        ResidenceListbox.Items.Add(String.Format("{0}  #  {1}", property.StreetAddr, ((Apartment)property).Unit));
         }
 
         private void ComunityListBoxClear()
@@ -77,14 +73,17 @@ namespace Assign_2
         {
             string[] personInfo = PersonListbox.SelectedItem.ToString().Split('\t');
 
-            /*
             string[] propertyInfoList = CheckPersonInList(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2]);
 
-            OutputTextbox.Text = PersonListbox.SelectedItem.ToString();
+            OutputTextbox.Text = String.Format("{0}, {1}, Occupation: {2}\n", propertyInfoList[0], personInfo[1], personInfo[2]);
 
-            foreach (var property in propertyInfoList)
-                OutputTextbox.AppendText($"\n\t{0}, property");
-                */
+            for (int i = 1; i < propertyInfoList.Length; i++)
+            {
+                if (propertyInfoList[i] == null) break;
+                OutputTextbox.AppendText(String.Format("\t{0}\n", propertyInfoList[i]));
+            }
+
+            OutputTextbox.AppendText(String.Format("### End output ###"));
         }
 
         private string[] CheckPersonInList(Community comm, string fName, ushort age, string occu)
@@ -97,7 +96,9 @@ namespace Assign_2
                      (res.Occupation == occu))) 
                     continue;
 
-                int index = 0;
+                infoList[0] = res.FullName;
+
+                int index = 1;
                 foreach (var property in comm.Props)
                     if (property.OwnerId == res.Id)
                         infoList[index++] = property.StreetAddr;
@@ -105,5 +106,11 @@ namespace Assign_2
 
             return infoList;
         }
+
+        private void ResidenceListbox_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
     }
 }

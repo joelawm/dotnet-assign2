@@ -543,8 +543,9 @@
             this.ResidenceListbox.Location = new System.Drawing.Point(1438, 62);
             this.ResidenceListbox.Margin = new System.Windows.Forms.Padding(6);
             this.ResidenceListbox.Name = "ResidenceListbox";
-            this.ResidenceListbox.Size = new System.Drawing.Size(558, 845);
+            this.ResidenceListbox.Size = new System.Drawing.Size(558, 816);
             this.ResidenceListbox.TabIndex = 14;
+            this.ResidenceListbox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ResidenceListbox_MouseClick);
             // 
             // Form1
             // 
