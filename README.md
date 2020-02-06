@@ -20,10 +20,10 @@ Parts finished:
 Adding a new resident:
 - [X] Before specifying a Community
 - [X] After
-- [ ] Didn't provide a name
-- [ ] Didn't provide an occupation
-- [ ] Birthday in the future?
-- [ ] Didn't specify a residence
+- [X] Didn't provide a name
+- [X] Didn't provide an occupation
+- [X] Birthday in the future?
+- [X] Didn't specify a residence
 - [ ] Success!
 - [ ] Residence confirmation
 

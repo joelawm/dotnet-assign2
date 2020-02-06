@@ -165,5 +165,49 @@ namespace Assign_2
                     else
                         ResidenceCombobox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit);
         }
+
+        private void AddNewResidentButton_Clicked(object sender, EventArgs e)
+        {
+            //clear the output textbox
+            ClearTextbox();
+            bool IsOk = true;
+
+            //check if the name texbox is empty
+            if (String.IsNullOrEmpty(NameTextbox.Text))
+            {
+                OutputTextbox.Text += "ERROR: Please enter a name for this resident." + Environment.NewLine;
+                IsOk = false;
+            }
+
+            //check if the Occupation textbox is empty
+            if (String.IsNullOrEmpty(OccupationTextbox.Text))
+            {
+                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." +Environment.NewLine;
+                IsOk = false;
+            }
+
+            //compare datetimes
+            DateTime dateselected = BirthdayPicker.Value;
+            int result = DateTime.Compare(dateselected, DateTime.Now);
+            if (result > 0)
+            {
+                OutputTextbox.Text += "ERROR: Birthdays cannot be defined from future dates." + Environment.NewLine;
+                IsOk = false;
+            }
+
+            //check if the residence combobox is empty
+            if (string.IsNullOrEmpty(ResidenceCombobox.Text))
+            {
+                OutputTextbox.Text += "ERROR: Please select a residence for this new resident to reside at." + Environment.NewLine;
+                IsOk = false;
+            }
+
+            if(IsOk == true)
+            {
+                OutputTextbox.Text += "Success." + Environment.NewLine;
+            }
+
+
+        }
     }
 }
