@@ -17,6 +17,9 @@ namespace Assign_2
         private static ActiveSycamore activeSycamore;
         private static ActiveDekalb activeDekalb;
         private static Community currentCommunity;
+        private static Community firstcommunity;
+        private static Community secondcommunity;
+
         public Form1()
         {
             InitializeComponent();
@@ -112,5 +115,152 @@ namespace Assign_2
 
         }
 
+        private void Dropdown_Preview(object sender, EventArgs e)
+        {
+            //clear the contents of the textbox
+            ClearTextbox();
+            //use both communitys and set active
+            activeDekalb = new ActiveDekalb();
+            firstcommunity = activeDekalb.ActiveDekalb_Files();
+            activeSycamore = new ActiveSycamore();
+            secondcommunity = activeSycamore.ActiveSycamore_Files();
+
+            //send the data to be gathered and displayer
+            OutputTextbox.Text += "There are " + NumberofRes(firstcommunity) + " people living in DeKalb." + Environment.NewLine;
+            OutputTextbox.Text += "There are " + NumberofRes(secondcommunity) + " people living in Sycamore." + Environment.NewLine;
+            ResidenceCombobox.Items.Clear();
+
+            //check which radio button is hit
+            if(DekalbRadioButton.Checked)
+            {
+                DisplayResidenceDropdown(firstcommunity);
+            }
+            else if(SycamoreRadioButton.Checked)
+            {
+                DisplayResidenceDropdown(secondcommunity);
+            }
+        }
+
+        //clear textbox
+        private void ClearTextbox()
+        {
+            OutputTextbox.Text = string.Empty;
+            OutputTextbox.Update();
+        }
+
+        //show the number of residents
+        private int NumberofRes(Community comm)
+        {
+            int i = 0;
+            foreach (var res in comm.Residents)
+            {
+                i += 1;
+            }
+            return i;
+        }
+
+        private void DisplayResidenceDropdown(Community comm)
+        {
+            ResidenceCombobox.Items.Add("House");
+            ResidenceCombobox.Items.Add("-----------------");
+            foreach (var property in comm.Props)
+                if (property as House != null)
+                    if (property.ForSale)
+                        ResidenceCombobox.Items.Add(property.StreetAddr + '*');
+                    else
+                        ResidenceCombobox.Items.Add(property.StreetAddr);
+
+            ResidenceCombobox.Items.Add("");
+            ResidenceCombobox.Items.Add("Apartment");
+            ResidenceCombobox.Items.Add("-----------------");
+            foreach (var property in comm.Props)
+                if (property as Apartment != null)
+                    if (property.ForSale)
+                        ResidenceCombobox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit + '*');
+                    else
+                        ResidenceCombobox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit);
+        }
+
+        private void AddNewResidentButton_Clicked(object sender, EventArgs e)
+        {
+            //clear the output textbox
+            ClearTextbox();
+            bool IsOk = true;
+
+            //check if the name texbox is empty
+            if (String.IsNullOrEmpty(NameTextbox.Text))
+            {
+                OutputTextbox.Text += "ERROR: Please enter a name for this resident." + Environment.NewLine;
+                IsOk = false;
+            }
+
+            //check for a space in the name
+            string ischecked = NameTextbox.Text.ToString();
+            if (ischecked.Contains(" ") == false)
+            {
+                OutputTextbox.Text += "ERROR: You need a space in between the first and the last name." + Environment.NewLine;
+                IsOk = false;
+            }
+
+            //check if the Occupation textbox is empty
+            if (String.IsNullOrEmpty(OccupationTextbox.Text))
+            {
+                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." +Environment.NewLine;
+                IsOk = false;
+            }
+
+            //compare datetimes
+            DateTime dateselected = BirthdayPicker.Value;
+            int result = DateTime.Compare(dateselected, DateTime.Now);
+            if (result > 0)
+            {
+                OutputTextbox.Text += "ERROR: Birthdays cannot be defined from future dates." + Environment.NewLine;
+                IsOk = false;
+            }
+
+            //check if the residence combobox is empty
+            if (string.IsNullOrEmpty(ResidenceCombobox.Text))
+            {
+                OutputTextbox.Text += "ERROR: Please select a residence for this new resident to reside at." + Environment.NewLine;
+                IsOk = false;
+            }
+
+            //check for invalid text in combobox
+            if(ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
+            {
+                OutputTextbox.Text += "ERROR: Please select a valid item in the combobox." + Environment.NewLine;
+                IsOk = false;
+            }
+
+            if(IsOk == true)
+            {
+                //use both communitys and set active
+                activeDekalb = new ActiveDekalb();
+                firstcommunity = activeDekalb.ActiveDekalb_Files();
+                activeSycamore = new ActiveSycamore();
+                secondcommunity = activeSycamore.ActiveSycamore_Files();
+
+                //add function
+                if (DekalbRadioButton.Checked)
+                {
+                    AddToProperty(firstcommunity);
+                }
+                else if (SycamoreRadioButton.Checked)
+                {
+                    AddToProperty(secondcommunity);
+                }
+            }
+        }
+
+        private void AddToProperty(Community comm)
+        {
+
+            foreach(var property in comm.Props)
+            {
+
+            }
+
+            //OutputTextbox.Text += "Success." + Name + " has beenadded as a resident to " + comm._name + Environment.NewLine;
+        }
     }
 }
