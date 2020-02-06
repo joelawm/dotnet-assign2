@@ -506,6 +506,7 @@
             this.ResidenceListbox.Name = "ResidenceListbox";
             this.ResidenceListbox.Size = new System.Drawing.Size(281, 439);
             this.ResidenceListbox.TabIndex = 14;
+            this.ResidenceListbox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ResidenceListbox_MouseClick);
             // 
             // Form1
             // 
