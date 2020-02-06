@@ -7,15 +7,7 @@
  * 
  */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
 
 namespace Assign_2
 {
@@ -24,12 +16,13 @@ namespace Assign_2
     {
         private static ActiveSycamore activeSycamore;
         private static ActiveDekalb activeDekalb;
+        private static Community currentCommunity;
         public Form1()
         {
             InitializeComponent();
         }
 
-        protected void CommunityListShowing(Community comm)
+        private void CommunityListShowing(Community comm)
         {
             foreach (var res in comm.Residents)
                 PersonListbox.Items.Add(res.FirstName +
@@ -58,23 +51,59 @@ namespace Assign_2
                         ResidenceListbox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit);
         }
 
-        protected void ComunityListBoxClear()
+        private void ComunityListBoxClear()
         {
             PersonListbox.Items.Clear();
             ResidenceListbox.Items.Clear();
         }
+
         private void DekalbRadioButton_Click(object sender, EventArgs e)
         {
             ComunityListBoxClear();
             activeDekalb = new ActiveDekalb();
-            CommunityListShowing(activeDekalb.ActiveDekalb_Files());
+            currentCommunity = activeDekalb.ActiveDekalb_Files();
+            CommunityListShowing(currentCommunity);
         }
 
         private void SycamoreRadioButton_Click(object sender, EventArgs e)
         {
             ComunityListBoxClear();
             activeSycamore = new ActiveSycamore();
-            CommunityListShowing(activeSycamore.ActiveSycamore_Files());
+            currentCommunity = activeSycamore.ActiveSycamore_Files();
+            CommunityListShowing(currentCommunity);
+        }
+
+        private void PersonListbox_MouseClick(object sender, MouseEventArgs e)
+        {
+            string[] personInfo = PersonListbox.SelectedItem.ToString().Split('\t');
+
+            /*
+            string[] propertyInfoList = CheckPersonInList(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2]);
+
+            OutputTextbox.Text = PersonListbox.SelectedItem.ToString();
+
+            foreach (var property in propertyInfoList)
+                OutputTextbox.AppendText($"\n\t{0}, property");
+                */
+        }
+
+        private string[] CheckPersonInList(Community comm, string fName, ushort age, string occu)
+        {
+            string[] infoList = new string[10];
+            foreach (var res in comm.Residents)
+            {
+                if (!((res.FirstName == fName) && 
+                     ((DateTime.Now.Year - res.Birthday.Year) == age) && 
+                     (res.Occupation == occu))) 
+                    continue;
+
+                int index = 0;
+                foreach (var property in comm.Props)
+                    if (property.OwnerId == res.Id)
+                        infoList[index++] = property.StreetAddr;
+            }
+
+            return infoList;
         }
     }
 }
