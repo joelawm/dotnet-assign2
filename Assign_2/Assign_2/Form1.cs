@@ -17,6 +17,9 @@ namespace Assign_2
         private static ActiveSycamore activeSycamore;
         private static ActiveDekalb activeDekalb;
         private static Community currentCommunity;
+        private static Community firstcommunity;
+        private static Community secondcommunity;
+
         public Form1()
         {
             InitializeComponent();
@@ -104,6 +107,63 @@ namespace Assign_2
             }
 
             return infoList;
+        }
+
+        private void Dropdown_Preview(object sender, EventArgs e)
+        {
+            //clear the contents of the textbox
+            ClearTextbox();
+            //use both communitys and set active
+            activeDekalb = new ActiveDekalb();
+            firstcommunity = activeDekalb.ActiveDekalb_Files();
+            activeSycamore = new ActiveSycamore();
+            secondcommunity = activeSycamore.ActiveSycamore_Files();
+
+            //send the data to be gathered and displayer
+            OutputTextbox.Text += "There are " + NumberofRes(firstcommunity) + " people living in DeKalb." + Environment.NewLine;
+            OutputTextbox.Text += "There are " + NumberofRes(secondcommunity) + " people living in Sycamore." + Environment.NewLine;
+            ResidenceCombobox.Items.Clear();
+            DisplayResidenceDropdown(firstcommunity);
+        }
+
+        //clear textbox
+        private void ClearTextbox()
+        {
+            OutputTextbox.Text = string.Empty;
+            OutputTextbox.Update();
+        }
+
+        //show the number of residents
+        private int NumberofRes(Community comm)
+        {
+            int i = 0;
+            foreach (var res in comm.Residents)
+            {
+                i += 1;
+            }
+            return i;
+        }
+
+        private void DisplayResidenceDropdown(Community comm)
+        {
+            ResidenceCombobox.Items.Add("House");
+            ResidenceCombobox.Items.Add("-----------------");
+            foreach (var property in comm.Props)
+                if (property as House != null)
+                    if (property.ForSale)
+                        ResidenceCombobox.Items.Add(property.StreetAddr + '*');
+                    else
+                        ResidenceCombobox.Items.Add(property.StreetAddr);
+
+            ResidenceCombobox.Items.Add("");
+            ResidenceCombobox.Items.Add("Apartment");
+            ResidenceCombobox.Items.Add("-----------------");
+            foreach (var property in comm.Props)
+                if (property as Apartment != null)
+                    if (property.ForSale)
+                        ResidenceCombobox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit + '*');
+                    else
+                        ResidenceCombobox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit);
         }
     }
 }

@@ -19,7 +19,7 @@ Parts finished:
 
 Adding a new resident:
 - [X] Before specifying a Community
-- [ ] After
+- [X] After
 - [ ] Didn't provide a name
 - [ ] Didn't provide an occupation
 - [ ] Birthday in the future?
