@@ -149,6 +149,7 @@
             this.ResidenceCombobox.Name = "ResidenceCombobox";
             this.ResidenceCombobox.Size = new System.Drawing.Size(221, 26);
             this.ResidenceCombobox.TabIndex = 7;
+            this.ResidenceCombobox.DropDown += new System.EventHandler(this.Dropdown_Preview);
             // 
             // ResidenceLabel
             // 
