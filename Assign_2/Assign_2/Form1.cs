@@ -17,8 +17,8 @@ namespace Assign_2
         private static ActiveSycamore activeSycamore;
         private static ActiveDekalb activeDekalb;
         private static Community currentCommunity;
-        private static Community firstcommunity;
-        private static Community secondcommunity;
+        private static Community firstCommunity;
+        private static Community secondCommunity;
 
         public Form1()
         {
@@ -110,35 +110,39 @@ namespace Assign_2
             return infoList;
         }
 
-        private void ResidenceListbox_MouseClick(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private void Dropdown_Preview(object sender, EventArgs e)
         {
             //clear the contents of the textbox
+            //might want to try and make this cleaner but my brain hurts
             ClearTextbox();
-            //use both communitys and set active
             activeDekalb = new ActiveDekalb();
-            firstcommunity = activeDekalb.ActiveDekalb_Files();
+            firstCommunity = activeDekalb.ActiveDekalb_Files();
             activeSycamore = new ActiveSycamore();
-            secondcommunity = activeSycamore.ActiveSycamore_Files();
+            secondCommunity = activeSycamore.ActiveSycamore_Files();
+            //dekalb
+            DisplayResidentAmounts(firstCommunity);
+            //syccamore
+            DisplayResidentAmounts(secondCommunity);
 
-            //send the data to be gathered and displayer
-            OutputTextbox.Text += "There are " + NumberofRes(firstcommunity) + " people living in DeKalb." + Environment.NewLine;
-            OutputTextbox.Text += "There are " + NumberofRes(secondcommunity) + " people living in Sycamore." + Environment.NewLine;
-            ResidenceCombobox.Items.Clear();
 
             //check which radio button is hit
             if(DekalbRadioButton.Checked)
             {
-                DisplayResidenceDropdown(firstcommunity);
+                activeDekalb = new ActiveDekalb();
+                currentCommunity = activeDekalb.ActiveDekalb_Files();
+                DisplayResidenceDropdown(currentCommunity);
             }
             else if(SycamoreRadioButton.Checked)
             {
-                DisplayResidenceDropdown(secondcommunity);
+                activeSycamore = new ActiveSycamore();
+                currentCommunity = activeSycamore.ActiveSycamore_Files();
+                DisplayResidenceDropdown(currentCommunity);
             }
+        }
+
+        private void DisplayResidentAmounts(Community comm)
+        {
+            OutputTextbox.Text += "There are " + NumberofRes(comm) + " people living in " + comm.Name + "." + Environment.NewLine;
         }
 
         //clear textbox
@@ -165,20 +169,14 @@ namespace Assign_2
             ResidenceCombobox.Items.Add("-----------------");
             foreach (var property in comm.Props)
                 if (property as House != null)
-                    if (property.ForSale)
-                        ResidenceCombobox.Items.Add(property.StreetAddr + '*');
-                    else
-                        ResidenceCombobox.Items.Add(property.StreetAddr);
+                    ResidenceCombobox.Items.Add(property.StreetAddr);
 
             ResidenceCombobox.Items.Add("");
             ResidenceCombobox.Items.Add("Apartment");
             ResidenceCombobox.Items.Add("-----------------");
             foreach (var property in comm.Props)
                 if (property as Apartment != null)
-                    if (property.ForSale)
-                        ResidenceCombobox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit + '*');
-                    else
-                        ResidenceCombobox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit);
+                    ResidenceCombobox.Items.Add(property.StreetAddr + "# " + ((Apartment)property).Unit);
         }
 
         private void AddNewResidentButton_Clicked(object sender, EventArgs e)
@@ -234,33 +232,123 @@ namespace Assign_2
 
             if(IsOk == true)
             {
-                //use both communitys and set active
-                activeDekalb = new ActiveDekalb();
-                firstcommunity = activeDekalb.ActiveDekalb_Files();
-                activeSycamore = new ActiveSycamore();
-                secondcommunity = activeSycamore.ActiveSycamore_Files();
-
                 //add function
                 if (DekalbRadioButton.Checked)
                 {
-                    AddToProperty(firstcommunity);
+                    activeDekalb = new ActiveDekalb();
+                    currentCommunity = activeDekalb.ActiveDekalb_Files();
+                    AddToProperty(currentCommunity);
                 }
                 else if (SycamoreRadioButton.Checked)
                 {
-                    AddToProperty(secondcommunity);
+                    activeSycamore = new ActiveSycamore();
+                    currentCommunity = activeSycamore.ActiveSycamore_Files();
+                    AddToProperty(currentCommunity);
                 }
             }
         }
 
         private void AddToProperty(Community comm)
         {
+            //temp variables
+            bool IsGood = false;
 
-            foreach(var property in comm.Props)
+            //keep checking and regenerating till a good number is found
+            while (IsGood == false)
             {
+                //make new random number
+                int rnd = GenerateRandomNo();
 
+                foreach (var res in comm.Residents)
+                {
+                    if (res.Id == rnd)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        IsGood = true;
+                    }
+                }
+
+                //double chacking to make sure it was good
+                if (IsGood == true)
+                {
+                    //take in the infroamtion
+                    string[] splitstring = NameTextbox.Text.ToString().Split(' ');
+                    string fName = splitstring[0];
+                    string lName = splitstring[1];
+                    string occ = OccupationTextbox.Text.ToString();
+                    DateTime dt = BirthdayPicker.Value;
+                    //convert int to uint
+                    uint id = (uint)(int)rnd;
+
+                    //find the resident id and from address and add it
+                    string lookup = ResidenceCombobox.Text;
+
+                    //search for the property and find its id
+                    foreach (var property in comm.Props)
+                    {
+                        bool added = false;
+                        //start going through each property listed
+                        if (property.StreetAddr == lookup)
+                        {
+
+                            bool isFound = false;
+                            foreach (var r in comm.Residents)
+                            {
+                                foreach (var e in r.Residencelds)
+                                {
+                                    if (e == property.Id)
+                                    {
+                                        //output
+                                        OutputTextbox.Text += "You are already a resident here" + Environment.NewLine;
+                                        isFound = true;
+                                        break;
+                                    }
+                                }
+
+                                //if not found then its good
+                                if (!isFound)
+                                {
+                                    var resId = property.Id.ToString();
+                                    comm.Residents.Add(new Person(id, dt, lName, fName, occ, resId));
+                                    OutputTextbox.Text += "Success! " + fName + " has been added as a resident to " + comm.Name + Environment.NewLine;
+                                    added = true;
+
+                                    //clear listbox
+                                    PersonListbox.Items.Clear();
+                                    //Refresh the residence list
+                                    CommunityListShowing(comm);
+                                    break;
+                                }
+                            }
+                        }
+                        if (added) break;
+                    }
+                }
             }
+        }
 
-            //OutputTextbox.Text += "Success." + Name + " has beenadded as a resident to " + comm._name + Environment.NewLine;
+        //Generate random number
+        public int GenerateRandomNo()
+        {
+            int min = 0;
+            int max = 99999;
+            Random rdm = new Random();
+            return rdm.Next(min, max);
+        }
+
+        private void GarageCheckbox_Click(object sender, EventArgs e)
+        {
+            if (GarageCheckbox.Checked == true)
+            {
+                AttachedCheckbox.Visible = true;
+            }
+            else
+            {
+                AttachedCheckbox.Visible = false;
+            }
         }
     }
 }

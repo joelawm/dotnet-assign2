@@ -24,7 +24,7 @@ Adding a new resident:
 - [X] Didn't provide an occupation
 - [X] Birthday in the future?
 - [X] Didn't specify a residence
-- [ ] Success!
+- [X] Success!
 - [ ] Residence confirmation
 
 Adding a New Property:
@@ -32,4 +32,4 @@ Adding a New Property:
 - [ ] Viewing the new Property. Note: There is no Owner, and the Property is listed as For-Sale. This is default.
 - [ ] Specifying a new Apartment
 - [ ] Seeing the new Apartment being listed
-- [ ] The only time you should see the AttachedGarage checkbox
+- [X] The only time you should see the AttachedGarage checkbox

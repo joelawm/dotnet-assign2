@@ -44,6 +44,7 @@
             this.OutputLabel = new System.Windows.Forms.Label();
             this.OutputTextbox = new System.Windows.Forms.TextBox();
             this.AddPropertyGroupBox = new System.Windows.Forms.GroupBox();
+            this.AttachedCheckbox = new System.Windows.Forms.CheckBox();
             this.FloorsUpDown = new System.Windows.Forms.NumericUpDown();
             this.BathsUpDown = new System.Windows.Forms.NumericUpDown();
             this.BedroomsUpDown = new System.Windows.Forms.NumericUpDown();
@@ -235,6 +236,7 @@
             // 
             // AddPropertyGroupBox
             // 
+            this.AddPropertyGroupBox.Controls.Add(this.AttachedCheckbox);
             this.AddPropertyGroupBox.Controls.Add(this.FloorsUpDown);
             this.AddPropertyGroupBox.Controls.Add(this.BathsUpDown);
             this.AddPropertyGroupBox.Controls.Add(this.BedroomsUpDown);
@@ -256,6 +258,18 @@
             this.AddPropertyGroupBox.TabIndex = 4;
             this.AddPropertyGroupBox.TabStop = false;
             this.AddPropertyGroupBox.Text = "Add Property";
+            // 
+            // AttachedCheckbox
+            // 
+            this.AttachedCheckbox.AutoSize = true;
+            this.AttachedCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.AttachedCheckbox.Location = new System.Drawing.Point(103, 208);
+            this.AttachedCheckbox.Name = "AttachedCheckbox";
+            this.AttachedCheckbox.Size = new System.Drawing.Size(92, 22);
+            this.AttachedCheckbox.TabIndex = 20;
+            this.AttachedCheckbox.Text = "Attached?";
+            this.AttachedCheckbox.UseVisualStyleBackColor = true;
+            this.AttachedCheckbox.Visible = false;
             // 
             // FloorsUpDown
             // 
@@ -321,6 +335,7 @@
             this.GarageCheckbox.TabIndex = 16;
             this.GarageCheckbox.Text = "Garage?";
             this.GarageCheckbox.UseVisualStyleBackColor = true;
+            this.GarageCheckbox.Click += new System.EventHandler(this.GarageCheckbox_Click);
             // 
             // GAddPropertyButton
             // 
@@ -506,7 +521,6 @@
             this.ResidenceListbox.Name = "ResidenceListbox";
             this.ResidenceListbox.Size = new System.Drawing.Size(281, 439);
             this.ResidenceListbox.TabIndex = 14;
-            this.ResidenceListbox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ResidenceListbox_MouseClick);
             // 
             // Form1
             // 
@@ -583,6 +597,7 @@
         private System.Windows.Forms.Button RemoveResidentButton;
         private System.Windows.Forms.ListBox PersonListbox;
         private System.Windows.Forms.ListBox ResidenceListbox;
+        private System.Windows.Forms.CheckBox AttachedCheckbox;
     }
 }
 
