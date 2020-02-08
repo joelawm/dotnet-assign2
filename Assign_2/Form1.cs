@@ -35,6 +35,8 @@ namespace Assign_2
 
         private void CommunityListShowing(Community comm)
         {
+            ComunityListBoxClear();
+
             foreach (var res in comm.Residents)
                 PersonListbox.Items.Add(String.Format("{0}\t{1}\t{2}", res.FirstName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
 
@@ -61,6 +63,25 @@ namespace Assign_2
             DisplayResidentAmounts(comm);
         }
 
+        private void ForSaleButton_Click(object sender, EventArgs e)
+        {
+            if (ResidenceListbox.SelectedItem != null)
+            {
+                string streetAddr = ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None)[0];
+                CheckPropertyForSale(currentCommunity, streetAddr);
+                CommunityListShowing(currentCommunity);
+            }
+        }
+
+        private void CheckPropertyForSale(Community comm, string s)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (s != property.StreetAddr) continue;
+                property.ForSale = true;
+            }
+        }
+
         private void ComunityListBoxClear()
         {
             PersonListbox.Items.Clear();
@@ -69,14 +90,12 @@ namespace Assign_2
 
         private void DekalbRadioButton_Click(object sender, EventArgs e)
         {
-            ComunityListBoxClear();
             currentCommunity = DekalbCommunity;
             CommunityListShowing(currentCommunity);
         }
 
         private void SycamoreRadioButton_Click(object sender, EventArgs e)
         {
-            ComunityListBoxClear();
             currentCommunity = SycamoreCommunity;
             CommunityListShowing(currentCommunity);
         }
@@ -370,6 +389,11 @@ namespace Assign_2
                 //Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
                 //Community.Props.Add(apartment);
             }
+        }
+
+        private void ResidenceListbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
