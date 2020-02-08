@@ -70,6 +70,7 @@ namespace Assign_2
                 string streetAddr = ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None)[0];
                 CheckPropertyForSale(currentCommunity, streetAddr);
                 CommunityListShowing(currentCommunity);
+                OutputTextbox.Text = streetAddr + " now is for sale.";
             }
         }
 
