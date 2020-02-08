@@ -365,14 +365,10 @@ namespace Assign_2
                 //add function
                 if (DekalbRadioButton.Checked)
                 {
-                    //activeDekalb = new ActiveDekalb();
-                    //currentCommunity = activeDekalb.ActiveDekalb_Files();
                     AddToProperty(currentCommunity);
                 }
                 else if (SycamoreRadioButton.Checked)
                 {
-                    //activeSycamore = new ActiveSycamore();
-                    //currentCommunity = activeSycamore.ActiveSycamore_Files();
                     AddToProperty(currentCommunity);
                 }
             }

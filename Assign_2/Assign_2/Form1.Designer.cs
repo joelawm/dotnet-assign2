@@ -477,6 +477,7 @@
             this.ForSaleButton.TabIndex = 9;
             this.ForSaleButton.Text = "Toggle For-Sale";
             this.ForSaleButton.UseVisualStyleBackColor = true;
+            this.ForSaleButton.Click += new System.EventHandler(this.ForSaleButton_Click);
             // 
             // BuyPropertyButton
             // 
