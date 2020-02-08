@@ -1,11 +1,11 @@
 ﻿/*
- * Name: Huajian Huang; zid: z1869893
- * Partner: Joseph Meyer; zid: z1788150
- * 
- * CSCI 473 - Assignment 2
- * Function: The main fucntion of this program is to create a piece of software that allows the managment of properties in DeKalb and Sycamore but now with a GUI.
- * 
- */
+* Name: Huajian Huang; zid: z1869893
+* Partner: Joseph Meyer; zid: z1788150
+* 
+* CSCI 473 - Assignment 2
+* Function: The main fucntion of this program is to create a piece of software that allows the managment of properties in DeKalb and Sycamore but now with a GUI.
+* 
+*/
 using System;
 using System.Windows.Forms;
 
@@ -14,19 +14,29 @@ namespace Assign_2
 
     public partial class Form1 : Form
     {
-        private static ActiveSycamore activeSycamore;
-        private static ActiveDekalb activeDekalb;
         private static Community currentCommunity;
-        private static Community firstCommunity;
-        private static Community secondCommunity;
+        private static Community DekalbCommunity;
+        private static Community SycamoreCommunity;
 
         public Form1()
         {
             InitializeComponent();
+            initailActiveCommunity();
+        }
+
+        private void initailActiveCommunity()
+        {
+            ActiveDekalb activeDekalb = new ActiveDekalb();
+            DekalbCommunity = activeDekalb.ActiveDekalb_Files();
+
+            ActiveSycamore activeSycamore = new ActiveSycamore();
+            SycamoreCommunity = activeSycamore.ActiveSycamore_Files();
         }
 
         private void CommunityListShowing(Community comm)
         {
+            CommunityListBoxClear();
+
             foreach (var res in comm.Residents)
                 PersonListbox.Items.Add(String.Format("{0}\t{1}\t{2}", res.FirstName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
 
@@ -48,9 +58,31 @@ namespace Assign_2
                         ResidenceListbox.Items.Add(String.Format("{0}  #  {1}  *", property.StreetAddr, ((Apartment)property).Unit));
                     else
                         ResidenceListbox.Items.Add(String.Format("{0}  #  {1}", property.StreetAddr, ((Apartment)property).Unit));
+
+            OutputTextbox.Clear();
+            DisplayResidentAmounts(comm);
         }
 
-        private void ComunityListBoxClear()
+        private void ForSaleButton_Click(object sender, EventArgs e)
+        {
+            if (ResidenceListbox.SelectedItem != null)
+            {
+                string streetAddr = ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None)[0];
+                CheckPropertyForSale(currentCommunity, streetAddr);
+                CommunityListShowing(currentCommunity);
+            }
+        }
+
+        private void CheckPropertyForSale(Community comm, string s)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (s != property.StreetAddr) continue;
+                property.ForSale = true;
+            }
+        }
+
+        private void CommunityListBoxClear()
         {
             PersonListbox.Items.Clear();
             ResidenceListbox.Items.Clear();
@@ -58,17 +90,15 @@ namespace Assign_2
 
         private void DekalbRadioButton_Click(object sender, EventArgs e)
         {
-            ComunityListBoxClear();
-            activeDekalb = new ActiveDekalb();
-            currentCommunity = activeDekalb.ActiveDekalb_Files();
+            CommunityListBoxClear();
+            currentCommunity = DekalbCommunity;
             CommunityListShowing(currentCommunity);
         }
 
         private void SycamoreRadioButton_Click(object sender, EventArgs e)
         {
-            ComunityListBoxClear();
-            activeSycamore = new ActiveSycamore();
-            currentCommunity = activeSycamore.ActiveSycamore_Files();
+            CommunityListBoxClear();
+            currentCommunity = SycamoreCommunity;
             CommunityListShowing(currentCommunity);
         }
 
@@ -94,9 +124,9 @@ namespace Assign_2
             string[] infoList = new string[10];
             foreach (var res in comm.Residents)
             {
-                if (!((res.FirstName == fName) && 
-                     ((DateTime.Now.Year - res.Birthday.Year) == age) && 
-                     (res.Occupation == occu))) 
+                if (!((res.FirstName == fName) &&
+                     ((DateTime.Now.Year - res.Birthday.Year) == age) &&
+                     (res.Occupation == occu)))
                     continue;
 
                 infoList[0] = res.FullName;
@@ -112,59 +142,17 @@ namespace Assign_2
 
         private void Dropdown_Preview(object sender, EventArgs e)
         {
-            //clear the contents of the textbox
-            //might want to try and make this cleaner but my brain hurts
-            ClearTextbox();
-            activeDekalb = new ActiveDekalb();
-            firstCommunity = activeDekalb.ActiveDekalb_Files();
-            activeSycamore = new ActiveSycamore();
-            secondCommunity = activeSycamore.ActiveSycamore_Files();
-            //dekalb
-            DisplayResidentAmounts(firstCommunity);
-            //syccamore
-            DisplayResidentAmounts(secondCommunity);
-
-
-            //check which radio button is hit
-            if(DekalbRadioButton.Checked)
-            {
-                activeDekalb = new ActiveDekalb();
-                currentCommunity = activeDekalb.ActiveDekalb_Files();
-                DisplayResidenceDropdown(currentCommunity);
-            }
-            else if(SycamoreRadioButton.Checked)
-            {
-                activeSycamore = new ActiveSycamore();
-                currentCommunity = activeSycamore.ActiveSycamore_Files();
-                DisplayResidenceDropdown(currentCommunity);
-            }
+            DisplayResidenceDropdown(currentCommunity);
         }
 
         private void DisplayResidentAmounts(Community comm)
         {
-            OutputTextbox.Text += "There are " + NumberofRes(comm) + " people living in " + comm.Name + "." + Environment.NewLine;
-        }
-
-        //clear textbox
-        private void ClearTextbox()
-        {
-            OutputTextbox.Text = string.Empty;
-            OutputTextbox.Update();
-        }
-
-        //show the number of residents
-        private int NumberofRes(Community comm)
-        {
-            int i = 0;
-            foreach (var res in comm.Residents)
-            {
-                i += 1;
-            }
-            return i;
+            OutputTextbox.Text += "There are " + currentCommunity.Population + " people living in " + comm.Name + "." + Environment.NewLine;
         }
 
         private void DisplayResidenceDropdown(Community comm)
         {
+            ResidenceCombobox.Items.Clear();
             ResidenceCombobox.Items.Add("House");
             ResidenceCombobox.Items.Add("-----------------");
             foreach (var property in comm.Props)
@@ -182,7 +170,7 @@ namespace Assign_2
         private void AddNewResidentButton_Clicked(object sender, EventArgs e)
         {
             //clear the output textbox
-            ClearTextbox();
+            OutputTextbox.Clear();
             bool IsOk = true;
 
             //check if the name texbox is empty
@@ -203,7 +191,7 @@ namespace Assign_2
             //check if the Occupation textbox is empty
             if (String.IsNullOrEmpty(OccupationTextbox.Text))
             {
-                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." +Environment.NewLine;
+                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." + Environment.NewLine;
                 IsOk = false;
             }
 
@@ -224,26 +212,23 @@ namespace Assign_2
             }
 
             //check for invalid text in combobox
-            if(ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
+            if (ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
             {
                 OutputTextbox.Text += "ERROR: Please select a valid item in the combobox." + Environment.NewLine;
                 IsOk = false;
             }
 
-            if(IsOk == true)
+            if (IsOk == true)
             {
+                CommunityListBoxClear();
                 //add function
                 if (DekalbRadioButton.Checked)
                 {
-                    activeDekalb = new ActiveDekalb();
-                    currentCommunity = activeDekalb.ActiveDekalb_Files();
-                    AddToProperty(currentCommunity);
+                    AddToProperty(DekalbCommunity);
                 }
                 else if (SycamoreRadioButton.Checked)
                 {
-                    activeSycamore = new ActiveSycamore();
-                    currentCommunity = activeSycamore.ActiveSycamore_Files();
-                    AddToProperty(currentCommunity);
+                    AddToProperty(SycamoreCommunity);
                 }
             }
         }
@@ -353,7 +338,7 @@ namespace Assign_2
 
         private void AptNumTextbox_TextChanged(object sender, EventArgs e)
         {
-            if(AptNumTextbox.Text.Length > 0)
+            if (AptNumTextbox.Text.Length > 0)
             {
                 GarageCheckbox.Visible = false;
                 FloorsUpDown.Enabled = false;
@@ -369,24 +354,25 @@ namespace Assign_2
         private void GAddPropertyButton_Click(object sender, EventArgs e)
         {
             //clear the output textbox
-            ClearTextbox();
+
+            OutputTextbox.Clear();
             bool IsOk = true;
 
             //can add error checking here if need be
 
-            if(IsOk == true)
+            if (IsOk == true)
             {
                 //add function
                 if (DekalbRadioButton.Checked)
                 {
-                    activeDekalb = new ActiveDekalb();
-                    currentCommunity = activeDekalb.ActiveDekalb_Files();
+                    //activeDekalb = new ActiveDekalb();
+                    //currentCommunity = activeDekalb.ActiveDekalb_Files();
                     AddToProperty(currentCommunity);
                 }
                 else if (SycamoreRadioButton.Checked)
                 {
-                    activeSycamore = new ActiveSycamore();
-                    currentCommunity = activeSycamore.ActiveSycamore_Files();
+                    //activeSycamore = new ActiveSycamore();
+                    //currentCommunity = activeSycamore.ActiveSycamore_Files();
                     AddToProperty(currentCommunity);
                 }
             }
@@ -397,14 +383,19 @@ namespace Assign_2
             //check wether were adding a apartment or a house
             if (String.IsNullOrEmpty(AptNumTextbox.Text))
             {
-                House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
-                Community.Props.Add(house);
+                // House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
+                // Community.Props.Add(house);
             }
             else
             {
-                Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
-                Community.Props.Add(apartment);
+                //Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
+                //Community.Props.Add(apartment);
             }
+        }
+
+        private void ResidenceListbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
