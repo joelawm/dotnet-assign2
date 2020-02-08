@@ -346,6 +346,7 @@
             this.GAddPropertyButton.TabIndex = 9;
             this.GAddPropertyButton.Text = "Add";
             this.GAddPropertyButton.UseVisualStyleBackColor = true;
+            this.GAddPropertyButton.Click += new System.EventHandler(this.GAddPropertyButton_Click);
             // 
             // FloorsLabel
             // 
@@ -380,9 +381,14 @@
             // SquareFtUpDown
             // 
             this.SquareFtUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.SquareFtUpDown.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             this.SquareFtUpDown.Location = new System.Drawing.Point(6, 102);
             this.SquareFtUpDown.Maximum = new decimal(new int[] {
-            2000,
+            10000,
             0,
             0,
             0});
@@ -422,6 +428,7 @@
             this.AptNumTextbox.Name = "AptNumTextbox";
             this.AptNumTextbox.Size = new System.Drawing.Size(45, 24);
             this.AptNumTextbox.TabIndex = 9;
+            this.AptNumTextbox.TextChanged += new System.EventHandler(this.AptNumTextbox_TextChanged);
             // 
             // StreetAddressTextbox
             // 
