@@ -166,7 +166,7 @@ namespace Assign_2
                     foreach (var property in comm.Props)
                     {
                         if (property.OwnerId != residentId) continue;
-                        
+
                         infoList[index++] = property.StreetAddr;
                         break;
                     }
@@ -461,8 +461,8 @@ namespace Assign_2
         {
             foreach (var res in comm.Residents)
             {
-                if (!(res.FirstName == fName && 
-                     (DateTime.Now.Year - res.Birthday.Year) == age && 
+                if (!(res.FirstName == fName &&
+                     (DateTime.Now.Year - res.Birthday.Year) == age &&
                      res.Occupation == occu))
                     continue;
 
@@ -488,6 +488,118 @@ namespace Assign_2
                 break;
             }
             UpdateCommunity(comm);
+        }
+
+        private string[] SelectedPersonInfo()
+        {
+            if (PersonListbox.SelectedItem != null)
+                return PersonListbox.SelectedItem.ToString().Split('\t');
+
+            return null;
+        }
+
+        private string[] SelectedPropertyInfo()
+        {
+            if (ResidenceListbox.SelectedItem != null)
+                return ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None);
+
+            return null;
+        }
+
+        private void AddResidentButton_Click(object sender, EventArgs e)
+        {
+            string[] personInfo = SelectedPersonInfo();
+            string[] propertyInfo = SelectedPropertyInfo();
+
+            if (personInfo != null && propertyInfo != null)
+            {
+                if (propertyInfo[propertyInfo.Length - 1] == "*")
+                {
+                    OutputTextbox.Text = "This property is for sale, please purchase it first";
+                    return;
+                }
+
+                int condiction = AddResidentToProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]);
+                
+                if (condiction == 0)
+                    OutputTextbox.Text = string.Format("{0} is adding into {1}.", personInfo[0], propertyInfo[0]);
+                else if (condiction == 1)
+                    OutputTextbox.Text = string.Format("{0} is already live in {1}.", personInfo[0], propertyInfo[0]);
+                else
+                    OutputTextbox.Text = string.Format("error: please reboot the program.", personInfo[0], propertyInfo[0]);
+            }
+            else
+                OutputTextbox.Text = "Please select a person and a property address";
+        }
+
+        // return condiction: 0 for success; 1 for resident already in property; 2 for property not found;
+        private int AddResidentToProperty(Community comm, string fName, ushort age, string occu, string stAddr)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.StreetAddr != stAddr) continue;
+
+                foreach (var res in comm.Residents)
+                {
+                    if (!(res.FirstName == fName) &&
+                         (DateTime.Now.Year - res.Birthday.Year) == age &&
+                         (res.Occupation == occu))
+                        continue;
+
+                    foreach (var resId in res.Residencelds)
+                        if (resId == property.OwnerId)
+                            return 1;
+
+                    res.Add(property.OwnerId);
+                    return 0;
+                }
+            }
+            return 2;
+        }
+
+        // return option: true for success; false for not found property
+        private bool RemoveResidentFromProperty(Community comm, string fName, ushort age, string occu, string stAddr)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.StreetAddr != stAddr) continue;
+
+                foreach (var res in comm.Residents)
+                {
+                    if (!(res.FirstName == fName) &&
+                         (DateTime.Now.Year - res.Birthday.Year) == age &&
+                         (res.Occupation == occu))
+                        continue;
+
+                    foreach (var resId in res.Residencelds)
+                    {
+                        if (resId == property.OwnerId)
+                        {
+                            res.Remove(property.OwnerId);
+                            return true;
+                        }
+                    }
+                    break;
+                }
+                break;
+            }
+            return false;
+        }
+
+        private void RemoveResidentButton_Click(object sender, EventArgs e)
+        {
+            string[] personInfo = SelectedPersonInfo();
+            string[] propertyInfo = SelectedPropertyInfo();
+
+            if (personInfo != null && propertyInfo != null)
+            {
+                if (RemoveResidentFromProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]))
+                    OutputTextbox.Text = string.Format("{0} is removing from {1}", personInfo[0], propertyInfo[0]);
+                else
+                    OutputTextbox.Text = string.Format("{0} is not live in {1}.", personInfo[0], propertyInfo[0]);
+            }
+            else
+                OutputTextbox.Text = "Please select a person and a property address";
         }
     }
 }

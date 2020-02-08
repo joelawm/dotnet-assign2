@@ -538,6 +538,7 @@
             this.AddResidentButton.TabIndex = 11;
             this.AddResidentButton.Text = "Add Resident";
             this.AddResidentButton.UseVisualStyleBackColor = true;
+            this.AddResidentButton.Click += new System.EventHandler(this.AddResidentButton_Click);
             // 
             // RemoveResidentButton
             // 
@@ -549,6 +550,7 @@
             this.RemoveResidentButton.TabIndex = 12;
             this.RemoveResidentButton.Text = "Remove Resident";
             this.RemoveResidentButton.UseVisualStyleBackColor = true;
+            this.RemoveResidentButton.Click += new System.EventHandler(this.RemoveResidentButton_Click);
             // 
             // PersonListbox
             // 
