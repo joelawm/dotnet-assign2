@@ -67,14 +67,40 @@ namespace Assign_2
         {
             if (ResidenceListbox.SelectedItem != null)
             {
-                string streetAddr = ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None)[0];
-                CheckPropertyForSale(currentCommunity, streetAddr);
+                string[] streetAddr = ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None);
+
+                if (streetAddr[streetAddr.Length - 1] == "*")
+                {
+                    OutputTextbox.Text = streetAddr[0] + ", this property is already for sale.";
+                    return;
+                }
+                ClearResidnetsForSale(currentCommunity, streetAddr[0]);
+                ChangePropertyForSale(currentCommunity, streetAddr[0]);
                 CommunityListShowing(currentCommunity);
-                OutputTextbox.Text = streetAddr + " now is for sale.";
+                OutputTextbox.Text = streetAddr[0] + " now is for sale.";
             }
         }
 
-        private void CheckPropertyForSale(Community comm, string s)
+        private void ClearResidnetsForSale(Community comm, string stAddr)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.StreetAddr != stAddr) continue;
+
+                foreach (var res in comm.Residents)
+                {
+                    foreach (var resId in res.Residencelds)
+                    {
+                        if (property.OwnerId != resId) continue;
+
+                        res.Remove(resId);
+                    }
+                }
+                break;
+            }
+        }
+
+        private void ChangePropertyForSale(Community comm, string s)
         {
             foreach (var property in comm.Props)
             {
@@ -89,16 +115,20 @@ namespace Assign_2
             ResidenceListbox.Items.Clear();
         }
 
+        private void UpdateCommunity(Community comm)
+        {
+            currentCommunity = comm;
+            CommunityListShowing(comm);
+        }
+
         private void DekalbRadioButton_Click(object sender, EventArgs e)
         {
-            currentCommunity = DekalbCommunity;
-            CommunityListShowing(currentCommunity);
+            UpdateCommunity(DekalbCommunity);
         }
 
         private void SycamoreRadioButton_Click(object sender, EventArgs e)
         {
-            currentCommunity = SycamoreCommunity;
-            CommunityListShowing(currentCommunity);
+            UpdateCommunity(SycamoreCommunity);
         }
 
         private void PersonListbox_MouseClick(object sender, MouseEventArgs e)
@@ -131,11 +161,18 @@ namespace Assign_2
                 infoList[0] = res.FullName;
 
                 int index = 1;
-                foreach (var property in comm.Props)
-                    if (property.OwnerId == res.Id)
+                foreach (var residentId in res.Residencelds)
+                {
+                    foreach (var property in comm.Props)
+                    {
+                        if (property.OwnerId != residentId) continue;
+                        
                         infoList[index++] = property.StreetAddr;
+                        break;
+                    }
+                }
+                break;
             }
-
             return infoList;
         }
 
@@ -221,14 +258,7 @@ namespace Assign_2
             {
                 ComunityListBoxClear();
                 //add function
-                if (DekalbRadioButton.Checked)
-                {
-                    AddToProperty(DekalbCommunity);
-                }
-                else if (SycamoreRadioButton.Checked)
-                {
-                    AddToProperty(SycamoreCommunity);
-                }
+                AddToProperty(currentCommunity);
             }
         }
 
@@ -392,9 +422,72 @@ namespace Assign_2
             }
         }
 
-        private void ResidenceListbox_SelectedIndexChanged(object sender, EventArgs e)
+        private void BuyPropertyButton_Click(object sender, EventArgs e)
         {
+            if (ResidenceListbox.SelectedItem != null && PersonListbox.SelectedItem != null)
+            {
+                bool forSaleCheck = false;
+                string[] propertyInfo = ResidenceListbox.SelectedItem.ToString().Split(new[] { "  " }, StringSplitOptions.None);
+                string[] personInfo = PersonListbox.SelectedItem.ToString().Split('\t');
+                if (propertyInfo[propertyInfo.Length - 1] == "*")
+                    forSaleCheck = true;
 
+                if (!forSaleCheck)
+                {
+                    OutputTextbox.Text = propertyInfo[0] + ", this property is not for sale.";
+                }
+                else
+                {
+                    uint personId = FindPersonId(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2]);
+                    uint propertyId = FindPropertyId(currentCommunity, propertyInfo[0]);
+                    BuyProperty(currentCommunity, personId, propertyId);
+                    OutputTextbox.Text = "Sucess, " + personInfo[0] + " has purchase the property at " + propertyInfo[0];
+                }
+            }
+        }
+
+        private uint FindPropertyId(Community comm, string stAddr)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.StreetAddr != stAddr) continue;
+
+                return property.OwnerId;
+            }
+            return 0;
+        }
+
+        private uint FindPersonId(Community comm, string fName, uint age, string occu)
+        {
+            foreach (var res in comm.Residents)
+            {
+                if (!(res.FirstName == fName && 
+                     (DateTime.Now.Year - res.Birthday.Year) == age && 
+                     res.Occupation == occu))
+                    continue;
+
+                return res.Id;
+            }
+            return 99999;
+        }
+
+        private void BuyProperty(Community comm, uint personId, uint propertyId)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.OwnerId != propertyId) continue;
+
+                foreach (var res in comm.Residents)
+                {
+                    if (res.Id != personId) continue;
+
+                    res.Add(propertyId);
+                    break;
+                }
+                property.ForSale = false;
+                break;
+            }
+            UpdateCommunity(comm);
         }
     }
 }
