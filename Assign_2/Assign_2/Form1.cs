@@ -1,11 +1,11 @@
 ﻿/*
-* Name: Huajian Huang; zid: z1869893
-* Partner: Joseph Meyer; zid: z1788150
-* 
-* CSCI 473 - Assignment 2
-* Function: The main fucntion of this program is to create a piece of software that allows the managment of properties in DeKalb and Sycamore but now with a GUI.
-* 
-*/
+ * Name: Huajian Huang; zid: z1869893
+ * Partner: Joseph Meyer; zid: z1788150
+ * 
+ * CSCI 473 - Assignment 2
+ * Function: The main fucntion of this program is to create a piece of software that allows the managment of properties in DeKalb and Sycamore but now with a GUI.
+ * 
+ */
 using System;
 using System.Windows.Forms;
 
@@ -35,7 +35,7 @@ namespace Assign_2
 
         private void CommunityListShowing(Community comm)
         {
-            CommunityListBoxClear();
+            ComunityListBoxClear();
 
             foreach (var res in comm.Residents)
                 PersonListbox.Items.Add(String.Format("{0}\t{1}\t{2}", res.FirstName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
@@ -82,7 +82,7 @@ namespace Assign_2
             }
         }
 
-        private void CommunityListBoxClear()
+        private void ComunityListBoxClear()
         {
             PersonListbox.Items.Clear();
             ResidenceListbox.Items.Clear();
@@ -90,14 +90,12 @@ namespace Assign_2
 
         private void DekalbRadioButton_Click(object sender, EventArgs e)
         {
-            CommunityListBoxClear();
             currentCommunity = DekalbCommunity;
             CommunityListShowing(currentCommunity);
         }
 
         private void SycamoreRadioButton_Click(object sender, EventArgs e)
         {
-            CommunityListBoxClear();
             currentCommunity = SycamoreCommunity;
             CommunityListShowing(currentCommunity);
         }
@@ -124,9 +122,9 @@ namespace Assign_2
             string[] infoList = new string[10];
             foreach (var res in comm.Residents)
             {
-                if (!((res.FirstName == fName) &&
-                     ((DateTime.Now.Year - res.Birthday.Year) == age) &&
-                     (res.Occupation == occu)))
+                if (!((res.FirstName == fName) && 
+                     ((DateTime.Now.Year - res.Birthday.Year) == age) && 
+                     (res.Occupation == occu))) 
                     continue;
 
                 infoList[0] = res.FullName;
@@ -191,7 +189,7 @@ namespace Assign_2
             //check if the Occupation textbox is empty
             if (String.IsNullOrEmpty(OccupationTextbox.Text))
             {
-                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." + Environment.NewLine;
+                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." +Environment.NewLine;
                 IsOk = false;
             }
 
@@ -212,15 +210,15 @@ namespace Assign_2
             }
 
             //check for invalid text in combobox
-            if (ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
+            if(ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
             {
                 OutputTextbox.Text += "ERROR: Please select a valid item in the combobox." + Environment.NewLine;
                 IsOk = false;
             }
 
-            if (IsOk == true)
+            if(IsOk == true)
             {
-                CommunityListBoxClear();
+                ComunityListBoxClear();
                 //add function
                 if (DekalbRadioButton.Checked)
                 {
@@ -338,7 +336,7 @@ namespace Assign_2
 
         private void AptNumTextbox_TextChanged(object sender, EventArgs e)
         {
-            if (AptNumTextbox.Text.Length > 0)
+            if(AptNumTextbox.Text.Length > 0)
             {
                 GarageCheckbox.Visible = false;
                 FloorsUpDown.Enabled = false;
@@ -360,7 +358,7 @@ namespace Assign_2
 
             //can add error checking here if need be
 
-            if (IsOk == true)
+            if(IsOk == true)
             {
                 //add function
                 if (DekalbRadioButton.Checked)
@@ -383,8 +381,8 @@ namespace Assign_2
             //check wether were adding a apartment or a house
             if (String.IsNullOrEmpty(AptNumTextbox.Text))
             {
-                // House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
-                // Community.Props.Add(house);
+               // House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
+               // Community.Props.Add(house);
             }
             else
             {
