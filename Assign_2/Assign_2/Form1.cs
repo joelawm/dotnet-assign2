@@ -601,5 +601,67 @@ namespace Assign_2
             else
                 OutputTextbox.Text = "Please select a person and a property address";
         }
+
+        private void AptNumTextbox_TextChanged(object sender, EventArgs e)
+        {
+            if(AptNumTextbox.Text.Length > 0)
+            {
+                GarageCheckbox.Visible = false;
+                FloorsUpDown.Enabled = false;
+                FloorsUpDown.Value = 1;
+            }
+            else
+            {
+                GarageCheckbox.Visible = true;
+                FloorsUpDown.Enabled = true;
+            }
+        }
+
+        private void GAddPropertyButton_Click(object sender, EventArgs e)
+        {
+            //clear the output textbox
+
+            OutputTextbox.Clear();
+            bool IsOk = true;
+
+            //can add error checking here if need be
+
+            if(IsOk == true)
+            {
+                //add function
+                if (DekalbRadioButton.Checked)
+                {
+                    //activeDekalb = new ActiveDekalb();
+                    //currentCommunity = activeDekalb.ActiveDekalb_Files();
+                    AddToProperty(currentCommunity);
+                }
+                else if (SycamoreRadioButton.Checked)
+                {
+                    //activeSycamore = new ActiveSycamore();
+                    //currentCommunity = activeSycamore.ActiveSycamore_Files();
+                    AddToProperty(currentCommunity);
+                }
+            }
+        }
+
+        private void AddAProperty(Community comm)
+        {
+            //check wether were adding a apartment or a house
+            if (String.IsNullOrEmpty(AptNumTextbox.Text))
+            {
+               // House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
+               // Community.Props.Add(house);
+            }
+            else
+            {
+                //Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
+                //Community.Props.Add(apartment);
+            }
+        }
+
+        private void ResidenceListbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -608,7 +608,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.SquareFtUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
