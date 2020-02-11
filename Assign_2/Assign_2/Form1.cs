@@ -325,7 +325,9 @@ namespace Assign_2
                                 //if not found then its good
                                 if (!isFound)
                                 {
-                                    var resId = property.Id.ToString();
+                                    //Add the property ID to the residnce list
+                                    var resId = property.OwnerId.ToString();
+
                                     comm.Residents.Add(new Person(id, dt, lName, fName, occ, resId));
                                     OutputTextbox.Text += "Success! " + fName + " has been added as a resident to " + comm.Name + Environment.NewLine;
                                     added = true;
@@ -392,33 +394,102 @@ namespace Assign_2
             if (IsOk == true)
             {
                 //add function
-                if (DekalbRadioButton.Checked)
-                {
-                    //activeDekalb = new ActiveDekalb();
-                    //currentCommunity = activeDekalb.ActiveDekalb_Files();
-                    AddToProperty(currentCommunity);
-                }
-                else if (SycamoreRadioButton.Checked)
-                {
-                    //activeSycamore = new ActiveSycamore();
-                    //currentCommunity = activeSycamore.ActiveSycamore_Files();
-                    AddToProperty(currentCommunity);
-                }
+                AddAProperty(currentCommunity);
             }
         }
 
         private void AddAProperty(Community comm)
         {
-            //check wether were adding a apartment or a house
-            if (String.IsNullOrEmpty(AptNumTextbox.Text))
+            //temp variables
+            bool IsGood = false;
+
+            //keep checking and regenerating till a good number is found
+            while (IsGood == false)
             {
-                // House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
-                // Community.Props.Add(house);
-            }
-            else
-            {
-                //Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
-                //Community.Props.Add(apartment);
+                //make new random number
+                int rnd = GenerateRandomNo();
+
+                foreach (var res in comm.Props)
+                {
+                    if (res.Id == rnd)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        IsGood = true;
+                    }
+                }
+                if(IsGood == true)
+                {
+                    //Start assigning values to the data for merging to new property
+                    uint id = (uint)(int)rnd; //convert int to uint
+                    uint x = 9999; //we dont plan to use these for this assignment according to rogness
+                    uint y = 9999; //we dont plan to use these for this assignment according to rogness
+                    uint oId = default(uint); //0 or default value
+                    string stAddr = StreetAddressTextbox.Text.ToString();
+                    string city = null;
+                    string zip = null;
+                    if (DekalbRadioButton.Checked)
+                    {
+                        city = "DeKalb";
+                        zip = "60115";
+                    }
+                    else if(SycamoreRadioButton.Checked)
+                    {
+                        city = "Sycamore";
+                        zip = "60178";
+                    }
+                    string state = "Illinois";
+                    bool forSale = true;
+                    decimal tempbr = BedroomsUpDown.Value;
+                    uint bedRoom = (uint)(decimal)tempbr;
+                    decimal tempb = BathsUpDown.Value;
+                    uint bath = (uint)(decimal)tempb;
+                    decimal tempsqft = SquareFtUpDown.Value;
+                    uint sqft = (uint)(decimal)tempsqft;
+                    decimal tempf = FloorsUpDown.Value;
+                    uint floor = (uint)(decimal)tempf;
+
+
+
+                    //check wether were adding a apartment or a house
+                    if (String.IsNullOrEmpty(AptNumTextbox.Text))
+                    {
+                        bool garage = false;
+                        bool aGarage = false;
+                        //check if it has a garage
+                        if(GarageCheckbox.Checked == true)
+                        {
+                            garage = true;
+                        }
+                        if(AttachedCheckbox.Checked == true)
+                        {
+                            aGarage = true;
+                        }
+                        
+                        House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
+                        comm.Props.Add(house);
+
+                        //clear listbox
+                        PersonListbox.Items.Clear();
+                        //Refresh the residence list
+                        CommunityListShowing(comm);
+                    }
+                    else
+                    {
+                        //set the properties unit value
+                        var unit = AptNumTextbox.Text;
+
+                        Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
+                        comm.Props.Add(apartment);
+
+                        //clear listbox
+                        PersonListbox.Items.Clear();
+                        //Refresh the residence list
+                        CommunityListShowing(comm);
+                    }
+                }
             }
         }
 
@@ -596,67 +667,10 @@ namespace Assign_2
                 if (RemoveResidentFromProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]))
                     OutputTextbox.Text = string.Format("{0} is removing from {1}", personInfo[0], propertyInfo[0]);
                 else
-                    OutputTextbox.Text = string.Format("{0} is not live in {1}.", personInfo[0], propertyInfo[0]);
+                    OutputTextbox.Text = string.Format("ERROR: {0} doesn't currently reside at the property at {1}.", personInfo[0], propertyInfo[0]);
             }
             else
                 OutputTextbox.Text = "Please select a person and a property address";
-        }
-
-        private void AptNumTextbox_TextChanged(object sender, EventArgs e)
-        {
-            if(AptNumTextbox.Text.Length > 0)
-            {
-                GarageCheckbox.Visible = false;
-                FloorsUpDown.Enabled = false;
-                FloorsUpDown.Value = 1;
-            }
-            else
-            {
-                GarageCheckbox.Visible = true;
-                FloorsUpDown.Enabled = true;
-            }
-        }
-
-        private void GAddPropertyButton_Click(object sender, EventArgs e)
-        {
-            //clear the output textbox
-
-            OutputTextbox.Clear();
-            bool IsOk = true;
-
-            //can add error checking here if need be
-
-            if(IsOk == true)
-            {
-                //add function
-                if (DekalbRadioButton.Checked)
-                {
-                    //activeDekalb = new ActiveDekalb();
-                    //currentCommunity = activeDekalb.ActiveDekalb_Files();
-                    AddToProperty(currentCommunity);
-                }
-                else if (SycamoreRadioButton.Checked)
-                {
-                    //activeSycamore = new ActiveSycamore();
-                    //currentCommunity = activeSycamore.ActiveSycamore_Files();
-                    AddToProperty(currentCommunity);
-                }
-            }
-        }
-
-        private void AddAProperty(Community comm)
-        {
-            //check wether were adding a apartment or a house
-            if (String.IsNullOrEmpty(AptNumTextbox.Text))
-            {
-               // House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
-               // Community.Props.Add(house);
-            }
-            else
-            {
-                //Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
-                //Community.Props.Add(apartment);
-            }
         }
 
         private void ResidenceListbox_SelectedIndexChanged(object sender, EventArgs e)
