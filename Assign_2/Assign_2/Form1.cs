@@ -72,13 +72,12 @@ namespace Assign_2
 
                 if (streetAddr[streetAddr.Length - 1] == "*")
                 {
-                    OutputTextbox.Text = streetAddr[0] + ", this property is already for sale.";
+                    OutputTextbox.Text = streetAddr[0] + " is ALREADY for sale.";
                     return;
                 }
-                ClearResidnetsForSale(currentCommunity, streetAddr[0]);
                 ChangePropertyForSale(currentCommunity, streetAddr[0]);
                 CommunityListShowing(currentCommunity);
-                OutputTextbox.Text = streetAddr[0] + " now is for sale.";
+                OutputTextbox.Text = streetAddr[0] + " is now list FOR SALE.";
             }
         }
 
@@ -179,14 +178,21 @@ namespace Assign_2
 
         private void Dropdown_Preview(object sender, EventArgs e)
         {
-            OutputTextbox.Clear();
-            //print out
-            DisplayResidentAmounts(DekalbCommunity);
-            DisplayResidentAmounts(SycamoreCommunity);
-
-            if(DekalbRadioButton.Checked == true || SycamoreRadioButton.Checked == true)
+            if (!(DekalbRadioButton.Checked || SycamoreRadioButton.Checked))
             {
-                DisplayResidenceDropdown(currentCommunity);
+                MessageBox.Show("Please, pick a community first");
+            }
+            else
+            {
+                OutputTextbox.Clear();
+                //print out
+                DisplayResidentAmounts(DekalbCommunity);
+                DisplayResidentAmounts(SycamoreCommunity);
+
+                if (DekalbRadioButton.Checked == true || SycamoreRadioButton.Checked == true)
+                {
+                    DisplayResidenceDropdown(currentCommunity);
+                }
             }
         }
 
@@ -514,14 +520,17 @@ namespace Assign_2
 
                 if (!forSaleCheck)
                 {
-                    OutputTextbox.Text = propertyInfo[0] + ", this property is not for sale.";
+                    OutputTextbox.Text = "ERROR: could not purchase the property at" + propertyInfo[0] + "as it is NOT list for sale.";
                 }
                 else
                 {
                     uint personId = FindPersonId(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2]);
                     uint propertyId = FindPropertyId(currentCommunity, propertyInfo[0]);
-                    BuyProperty(currentCommunity, personId, propertyId);
-                    OutputTextbox.Text = "Sucess, " + personInfo[0] + " has purchase the property at " + propertyInfo[0];
+
+                    if (BuyProperty(currentCommunity, personId, propertyId))
+                        OutputTextbox.Text = "Sucess, " + personInfo[0] + " has purchase the property at " + propertyInfo[0];
+                    else
+                        OutputTextbox.Text = "ERROR: " + personInfo[0] + " already owns the property found at " + propertyInfo[0];
                 }
             }
         }
@@ -551,23 +560,30 @@ namespace Assign_2
             return 99999;
         }
 
-        private void BuyProperty(Community comm, uint personId, uint propertyId)
+        private bool BuyProperty(Community comm, uint personId, uint propertyId)
         {
-            foreach (var property in comm.Props)
+            foreach (var res in comm.Residents)
             {
-                if (property.OwnerId != propertyId) continue;
+                if (res.Id != personId) continue;
 
-                foreach (var res in comm.Residents)
+                foreach (var resID in res.Residencelds)
                 {
-                    if (res.Id != personId) continue;
-
-                    res.Add(propertyId);
-                    break;
+                    if (resID == propertyId)
+                        return false;
                 }
-                property.ForSale = false;
+                
+                res.Add(propertyId);
                 break;
             }
+
+            foreach (var property in comm.Props) 
+            {
+                if (property.OwnerId != propertyId) continue;
+                property.ForSale = false;
+            }
+
             UpdateCommunity(comm);
+            return true;
         }
 
         private string[] SelectedPersonInfo()
@@ -593,18 +609,20 @@ namespace Assign_2
 
             if (personInfo != null && propertyInfo != null)
             {
+                /*
                 if (propertyInfo[propertyInfo.Length - 1] == "*")
                 {
                     OutputTextbox.Text = "This property is for sale, please purchase it first";
                     return;
                 }
+                */
 
                 int condiction = AddResidentToProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]);
                 
                 if (condiction == 0)
-                    OutputTextbox.Text = string.Format("{0} is adding into {1}.", personInfo[0], propertyInfo[0]);
+                    OutputTextbox.Text = string.Format("Success, {0} now resides at the prperty at {1}.", personInfo[0], propertyInfo[0]);
                 else if (condiction == 1)
-                    OutputTextbox.Text = string.Format("{0} is already live in {1}.", personInfo[0], propertyInfo[0]);
+                    OutputTextbox.Text = string.Format("ERROR: {0} already resides at the prperty at {1}.", personInfo[0], propertyInfo[0]);
                 else
                     OutputTextbox.Text = string.Format("error: please reboot the program.", personInfo[0], propertyInfo[0]);
             }
@@ -674,17 +692,12 @@ namespace Assign_2
             if (personInfo != null && propertyInfo != null)
             {
                 if (RemoveResidentFromProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]))
-                    OutputTextbox.Text = string.Format("{0} is removing from {1}", personInfo[0], propertyInfo[0]);
+                    OutputTextbox.Text = string.Format("Success: {0} no longer resides in the property at {1}", personInfo[0], propertyInfo[0]);
                 else
                     OutputTextbox.Text = string.Format("ERROR: {0} doesn't currently reside at the property at {1}.", personInfo[0], propertyInfo[0]);
             }
             else
                 OutputTextbox.Text = "Please select a person and a property address";
-        }
-
-        private void ResidenceListbox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
