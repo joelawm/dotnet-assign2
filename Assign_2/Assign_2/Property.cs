@@ -36,7 +36,7 @@ namespace Assign_2
         }
 
         //creating the Property Object
-        public Property(uint o, uint x, uint y, uint id, string sa, string c, string st, string z, bool fs)
+        public Property(uint id, uint x, uint y, uint o, string sa, string c, string st, string z, bool fs)
         {
             _id = id;
             _x = x;
