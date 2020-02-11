@@ -3,17 +3,17 @@ Assignment 2 for dot net
 
 Parts finished:
 - [X] Selecting a Community
-- [ ] Selecting Sycamore's Mayor, Alan Turing. Note his dual residence.
+- [X] Selecting Sycamore's Mayor, Alan Turing. Note his dual residence.
 - [ ] Selecting a Residence
-- [ ] Listing 8768 Pinecrest Rd. for sale
-- [ ] Alan Turing then buying that property.
+- [X] Listing 8768 Pinecrest Rd. for sale
+- [X] Alan Turing then buying that property.
 - [ ] Confirmation of the new Owner
-- [ ] Failing to buy a not-ForSale property
-- [ ] Failing to buy an already owned property
-- [ ] Alan Turing moving into 8768 Pinecrest Rd.
+- [X] Failing to buy a not-ForSale property
+- [X] Failing to buy an already owned property
+- [X] Alan Turing moving into 8768 Pinecrest Rd.
 - [ ] Confirmation of new residency
-- [ ] Failing to move into already residing residence
-- [ ] Alan Turing moving out of 8768 Pinecrest Rd. (see his TwitLonger for an explanation. Major drama!)
+- [X] Failing to move into already residing residence
+- [X] Alan Turing moving out of 8768 Pinecrest Rd. (see his TwitLonger for an explanation. Major drama!)
 - [ ] Confirmation of vacancy
 - [X] Failing to move out of residence, where he doesn't reside
 
