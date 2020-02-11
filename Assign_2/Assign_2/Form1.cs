@@ -67,13 +67,40 @@ namespace Assign_2
         {
             if (ResidenceListbox.SelectedItem != null)
             {
-                string streetAddr = ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None)[0];
-                CheckPropertyForSale(currentCommunity, streetAddr);
+                string[] streetAddr = ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None);
+
+                if (streetAddr[streetAddr.Length - 1] == "*")
+                {
+                    OutputTextbox.Text = streetAddr[0] + ", this property is already for sale.";
+                    return;
+                }
+                ClearResidnetsForSale(currentCommunity, streetAddr[0]);
+                ChangePropertyForSale(currentCommunity, streetAddr[0]);
                 CommunityListShowing(currentCommunity);
+                OutputTextbox.Text = streetAddr[0] + " now is for sale.";
             }
         }
 
-        private void CheckPropertyForSale(Community comm, string s)
+        private void ClearResidnetsForSale(Community comm, string stAddr)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.StreetAddr != stAddr) continue;
+
+                foreach (var res in comm.Residents)
+                {
+                    foreach (var resId in res.Residencelds)
+                    {
+                        if (property.OwnerId != resId) continue;
+
+                        res.Remove(resId);
+                    }
+                }
+                break;
+            }
+        }
+
+        private void ChangePropertyForSale(Community comm, string s)
         {
             foreach (var property in comm.Props)
             {
@@ -88,16 +115,20 @@ namespace Assign_2
             ResidenceListbox.Items.Clear();
         }
 
+        private void UpdateCommunity(Community comm)
+        {
+            currentCommunity = comm;
+            CommunityListShowing(comm);
+        }
+
         private void DekalbRadioButton_Click(object sender, EventArgs e)
         {
-            currentCommunity = DekalbCommunity;
-            CommunityListShowing(currentCommunity);
+            UpdateCommunity(DekalbCommunity);
         }
 
         private void SycamoreRadioButton_Click(object sender, EventArgs e)
         {
-            currentCommunity = SycamoreCommunity;
-            CommunityListShowing(currentCommunity);
+            UpdateCommunity(SycamoreCommunity);
         }
 
         private void PersonListbox_MouseClick(object sender, MouseEventArgs e)
@@ -122,19 +153,26 @@ namespace Assign_2
             string[] infoList = new string[10];
             foreach (var res in comm.Residents)
             {
-                if (!((res.FirstName == fName) && 
-                     ((DateTime.Now.Year - res.Birthday.Year) == age) && 
-                     (res.Occupation == occu))) 
+                if (!((res.FirstName == fName) &&
+                     ((DateTime.Now.Year - res.Birthday.Year) == age) &&
+                     (res.Occupation == occu)))
                     continue;
 
                 infoList[0] = res.FullName;
 
                 int index = 1;
-                foreach (var property in comm.Props)
-                    if (property.OwnerId == res.Id)
-                        infoList[index++] = property.StreetAddr;
-            }
+                foreach (var residentId in res.Residencelds)
+                {
+                    foreach (var property in comm.Props)
+                    {
+                        if (property.OwnerId != residentId) continue;
 
+                        infoList[index++] = property.StreetAddr;
+                        break;
+                    }
+                }
+                break;
+            }
             return infoList;
         }
 
@@ -189,7 +227,7 @@ namespace Assign_2
             //check if the Occupation textbox is empty
             if (String.IsNullOrEmpty(OccupationTextbox.Text))
             {
-                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." +Environment.NewLine;
+                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." + Environment.NewLine;
                 IsOk = false;
             }
 
@@ -210,24 +248,17 @@ namespace Assign_2
             }
 
             //check for invalid text in combobox
-            if(ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
+            if (ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
             {
                 OutputTextbox.Text += "ERROR: Please select a valid item in the combobox." + Environment.NewLine;
                 IsOk = false;
             }
 
-            if(IsOk == true)
+            if (IsOk == true)
             {
                 ComunityListBoxClear();
                 //add function
-                if (DekalbRadioButton.Checked)
-                {
-                    AddToProperty(DekalbCommunity);
-                }
-                else if (SycamoreRadioButton.Checked)
-                {
-                    AddToProperty(SycamoreCommunity);
-                }
+                AddToProperty(currentCommunity);
             }
         }
 
@@ -332,6 +363,243 @@ namespace Assign_2
             {
                 AttachedCheckbox.Visible = false;
             }
+        }
+
+        private void AptNumTextbox_TextChanged(object sender, EventArgs e)
+        {
+            if (AptNumTextbox.Text.Length > 0)
+            {
+                GarageCheckbox.Visible = false;
+                FloorsUpDown.Enabled = false;
+                FloorsUpDown.Value = 1;
+            }
+            else
+            {
+                GarageCheckbox.Visible = true;
+                FloorsUpDown.Enabled = true;
+            }
+        }
+
+        private void GAddPropertyButton_Click(object sender, EventArgs e)
+        {
+            //clear the output textbox
+
+            OutputTextbox.Clear();
+            bool IsOk = true;
+
+            //can add error checking here if need be
+
+            if (IsOk == true)
+            {
+                //add function
+                if (DekalbRadioButton.Checked)
+                {
+                    //activeDekalb = new ActiveDekalb();
+                    //currentCommunity = activeDekalb.ActiveDekalb_Files();
+                    AddToProperty(currentCommunity);
+                }
+                else if (SycamoreRadioButton.Checked)
+                {
+                    //activeSycamore = new ActiveSycamore();
+                    //currentCommunity = activeSycamore.ActiveSycamore_Files();
+                    AddToProperty(currentCommunity);
+                }
+            }
+        }
+
+        private void AddAProperty(Community comm)
+        {
+            //check wether were adding a apartment or a house
+            if (String.IsNullOrEmpty(AptNumTextbox.Text))
+            {
+                // House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
+                // Community.Props.Add(house);
+            }
+            else
+            {
+                //Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
+                //Community.Props.Add(apartment);
+            }
+        }
+
+        private void BuyPropertyButton_Click(object sender, EventArgs e)
+        {
+            if (ResidenceListbox.SelectedItem != null && PersonListbox.SelectedItem != null)
+            {
+                bool forSaleCheck = false;
+                string[] propertyInfo = ResidenceListbox.SelectedItem.ToString().Split(new[] { "  " }, StringSplitOptions.None);
+                string[] personInfo = PersonListbox.SelectedItem.ToString().Split('\t');
+                if (propertyInfo[propertyInfo.Length - 1] == "*")
+                    forSaleCheck = true;
+
+                if (!forSaleCheck)
+                {
+                    OutputTextbox.Text = propertyInfo[0] + ", this property is not for sale.";
+                }
+                else
+                {
+                    uint personId = FindPersonId(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2]);
+                    uint propertyId = FindPropertyId(currentCommunity, propertyInfo[0]);
+                    BuyProperty(currentCommunity, personId, propertyId);
+                    OutputTextbox.Text = "Sucess, " + personInfo[0] + " has purchase the property at " + propertyInfo[0];
+                }
+            }
+        }
+
+        private uint FindPropertyId(Community comm, string stAddr)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.StreetAddr != stAddr) continue;
+
+                return property.OwnerId;
+            }
+            return 0;
+        }
+
+        private uint FindPersonId(Community comm, string fName, uint age, string occu)
+        {
+            foreach (var res in comm.Residents)
+            {
+                if (!(res.FirstName == fName &&
+                     (DateTime.Now.Year - res.Birthday.Year) == age &&
+                     res.Occupation == occu))
+                    continue;
+
+                return res.Id;
+            }
+            return 99999;
+        }
+
+        private void BuyProperty(Community comm, uint personId, uint propertyId)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.OwnerId != propertyId) continue;
+
+                foreach (var res in comm.Residents)
+                {
+                    if (res.Id != personId) continue;
+
+                    res.Add(propertyId);
+                    break;
+                }
+                property.ForSale = false;
+                break;
+            }
+            UpdateCommunity(comm);
+        }
+
+        private string[] SelectedPersonInfo()
+        {
+            if (PersonListbox.SelectedItem != null)
+                return PersonListbox.SelectedItem.ToString().Split('\t');
+
+            return null;
+        }
+
+        private string[] SelectedPropertyInfo()
+        {
+            if (ResidenceListbox.SelectedItem != null)
+                return ResidenceListbox.SelectedItem.ToString().Split(new string[] { "  " }, StringSplitOptions.None);
+
+            return null;
+        }
+
+        private void AddResidentButton_Click(object sender, EventArgs e)
+        {
+            string[] personInfo = SelectedPersonInfo();
+            string[] propertyInfo = SelectedPropertyInfo();
+
+            if (personInfo != null && propertyInfo != null)
+            {
+                if (propertyInfo[propertyInfo.Length - 1] == "*")
+                {
+                    OutputTextbox.Text = "This property is for sale, please purchase it first";
+                    return;
+                }
+
+                int condiction = AddResidentToProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]);
+                
+                if (condiction == 0)
+                    OutputTextbox.Text = string.Format("{0} is adding into {1}.", personInfo[0], propertyInfo[0]);
+                else if (condiction == 1)
+                    OutputTextbox.Text = string.Format("{0} is already live in {1}.", personInfo[0], propertyInfo[0]);
+                else
+                    OutputTextbox.Text = string.Format("error: please reboot the program.", personInfo[0], propertyInfo[0]);
+            }
+            else
+                OutputTextbox.Text = "Please select a person and a property address";
+        }
+
+        // return condiction: 0 for success; 1 for resident already in property; 2 for property not found;
+        private int AddResidentToProperty(Community comm, string fName, ushort age, string occu, string stAddr)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.StreetAddr != stAddr) continue;
+
+                foreach (var res in comm.Residents)
+                {
+                    if (!(res.FirstName == fName) &&
+                         (DateTime.Now.Year - res.Birthday.Year) == age &&
+                         (res.Occupation == occu))
+                        continue;
+
+                    foreach (var resId in res.Residencelds)
+                        if (resId == property.OwnerId)
+                            return 1;
+
+                    res.Add(property.OwnerId);
+                    return 0;
+                }
+            }
+            return 2;
+        }
+
+        // return option: true for success; false for not found property
+        private bool RemoveResidentFromProperty(Community comm, string fName, ushort age, string occu, string stAddr)
+        {
+            foreach (var property in comm.Props)
+            {
+                if (property.StreetAddr != stAddr) continue;
+
+                foreach (var res in comm.Residents)
+                {
+                    if (!(res.FirstName == fName) &&
+                         (DateTime.Now.Year - res.Birthday.Year) == age &&
+                         (res.Occupation == occu))
+                        continue;
+
+                    foreach (var resId in res.Residencelds)
+                    {
+                        if (resId == property.OwnerId)
+                        {
+                            res.Remove(property.OwnerId);
+                            return true;
+                        }
+                    }
+                    break;
+                }
+                break;
+            }
+            return false;
+        }
+
+        private void RemoveResidentButton_Click(object sender, EventArgs e)
+        {
+            string[] personInfo = SelectedPersonInfo();
+            string[] propertyInfo = SelectedPropertyInfo();
+
+            if (personInfo != null && propertyInfo != null)
+            {
+                if (RemoveResidentFromProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]))
+                    OutputTextbox.Text = string.Format("{0} is removing from {1}", personInfo[0], propertyInfo[0]);
+                else
+                    OutputTextbox.Text = string.Format("{0} is not live in {1}.", personInfo[0], propertyInfo[0]);
+            }
+            else
+                OutputTextbox.Text = "Please select a person and a property address";
         }
 
         private void AptNumTextbox_TextChanged(object sender, EventArgs e)
