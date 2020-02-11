@@ -75,7 +75,7 @@ namespace Assign_2
                     OutputTextbox.Text = streetAddr[0] + " is ALREADY for sale.";
                     return;
                 }
-                ChangePropertyForSale(currentCommunity, streetAddr[0]);
+                ChangePropertyForSale(currentCommunity, streetAddr);
                 CommunityListShowing(currentCommunity);
                 OutputTextbox.Text = streetAddr[0] + " is now list FOR SALE.";
             }
@@ -91,7 +91,7 @@ namespace Assign_2
                 {
                     foreach (var resId in res.Residencelds)
                     {
-                        if (property.OwnerId != resId) continue;
+                        if (property.Id != resId) continue;
 
                         res.Remove(resId);
                     }
@@ -100,12 +100,25 @@ namespace Assign_2
             }
         }
 
-        private void ChangePropertyForSale(Community comm, string s)
+        private void ChangePropertyForSale(Community comm, string[] s)
         {
             foreach (var property in comm.Props)
             {
-                if (s != property.StreetAddr) continue;
-                property.ForSale = true;
+                if (s[0] != property.StreetAddr) continue;
+
+                if (property is Apartment)
+                {
+                    if (s[2] == ((Apartment)property).Unit)
+                    {
+                        property.ForSale = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    property.ForSale = true;
+                    break;
+                }
             }
         }
 
@@ -165,9 +178,13 @@ namespace Assign_2
                 {
                     foreach (var property in comm.Props)
                     {
-                        if (property.OwnerId != residentId) continue;
+                        if (property.Id != residentId) continue;
 
-                        infoList[index++] = property.StreetAddr;
+                        if (property is Apartment)
+                            infoList[index++] = property.StreetAddr + " # " + ((Apartment)property).Unit;
+                        else
+                            infoList[index++] = property.StreetAddr;
+
                         break;
                     }
                 }
@@ -341,7 +358,7 @@ namespace Assign_2
                                 if (!isFound)
                                 {
                                     //Add the property ID to the residnce list
-                                    var resId = property.OwnerId.ToString();
+                                    var resId = property.Id.ToString();
 
                                     comm.Residents.Add(new Person(id, dt, lName, fName, occ, resId));
                                     OutputTextbox.Text += "Success! " + fName + " has been added as a resident to " + comm.Name + Environment.NewLine;
@@ -435,7 +452,7 @@ namespace Assign_2
                         IsGood = true;
                     }
                 }
-                if(IsGood == true)
+                if (IsGood == true)
                 {
                     //Start assigning values to the data for merging to new property
                     uint id = (uint)(int)rnd; //convert int to uint
@@ -450,7 +467,7 @@ namespace Assign_2
                         city = "DeKalb";
                         zip = "60115";
                     }
-                    else if(SycamoreRadioButton.Checked)
+                    else if (SycamoreRadioButton.Checked)
                     {
                         city = "Sycamore";
                         zip = "60178";
@@ -474,15 +491,15 @@ namespace Assign_2
                         bool garage = false;
                         bool aGarage = false;
                         //check if it has a garage
-                        if(GarageCheckbox.Checked == true)
+                        if (GarageCheckbox.Checked == true)
                         {
                             garage = true;
                         }
-                        if(AttachedCheckbox.Checked == true)
+                        if (AttachedCheckbox.Checked == true)
                         {
                             aGarage = true;
                         }
-                        
+
                         House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
                         comm.Props.Add(house);
 
@@ -525,9 +542,9 @@ namespace Assign_2
                 else
                 {
                     uint personId = FindPersonId(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2]);
-                    uint propertyId = FindPropertyId(currentCommunity, propertyInfo[0]);
+                    uint propertyOwnerId = FindPropertyOwnerId(currentCommunity, propertyInfo);
 
-                    if (BuyProperty(currentCommunity, personId, propertyId))
+                    if (BuyProperty(currentCommunity, personId, propertyOwnerId))
                         OutputTextbox.Text = "Sucess, " + personInfo[0] + " has purchase the property at " + propertyInfo[0];
                     else
                         OutputTextbox.Text = "ERROR: " + personInfo[0] + " already owns the property found at " + propertyInfo[0];
@@ -535,13 +552,18 @@ namespace Assign_2
             }
         }
 
-        private uint FindPropertyId(Community comm, string stAddr)
+        private uint FindPropertyOwnerId(Community comm, string[] stAddr)
         {
             foreach (var property in comm.Props)
             {
-                if (property.StreetAddr != stAddr) continue;
+                if (property.StreetAddr != stAddr[0]) continue;
 
-                return property.OwnerId;
+                if (property is Apartment)
+                {
+                    if (stAddr[2] != ((Apartment)property).Unit) continue;
+                }
+
+                return property.Id;
             }
             return 0;
         }
@@ -566,22 +588,20 @@ namespace Assign_2
             {
                 if (res.Id != personId) continue;
 
-                foreach (var resID in res.Residencelds)
+                if (res.Id == propertyId)
                 {
-                    if (resID == propertyId)
-                        return false;
+                    return false;
                 }
-                
-                res.Add(propertyId);
-                break;
+                else
+                {
+                    foreach (var property in comm.Props)
+                    {
+                        if (property.Id != propertyId) continue;
+                        property.ForSale = false;
+                        property.OwnerId = res.Id;
+                    }
+                }
             }
-
-            foreach (var property in comm.Props) 
-            {
-                if (property.OwnerId != propertyId) continue;
-                property.ForSale = false;
-            }
-
             UpdateCommunity(comm);
             return true;
         }
@@ -617,69 +637,78 @@ namespace Assign_2
                 }
                 */
 
-                int condiction = AddResidentToProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]);
-                
-                if (condiction == 0)
+                bool condiction = AddResidentToProperty(personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo);
+
+                if (condiction)
                     OutputTextbox.Text = string.Format("Success, {0} now resides at the prperty at {1}.", personInfo[0], propertyInfo[0]);
-                else if (condiction == 1)
-                    OutputTextbox.Text = string.Format("ERROR: {0} already resides at the prperty at {1}.", personInfo[0], propertyInfo[0]);
                 else
-                    OutputTextbox.Text = string.Format("error: please reboot the program.", personInfo[0], propertyInfo[0]);
+                    OutputTextbox.Text = string.Format("ERROR: {0} already resides at the prperty at {1}.", personInfo[0], propertyInfo[0]);
             }
             else
                 OutputTextbox.Text = "Please select a person and a property address";
         }
 
         // return condiction: 0 for success; 1 for resident already in property; 2 for property not found;
-        private int AddResidentToProperty(Community comm, string fName, ushort age, string occu, string stAddr)
+        private bool AddResidentToProperty(string fName, ushort age, string occu, string[] stAddr)
         {
-            foreach (var property in comm.Props)
+            foreach (var res in currentCommunity.Residents)
             {
-                if (property.StreetAddr != stAddr) continue;
-
-                foreach (var res in comm.Residents)
+                if ((res.FirstName == fName) &&
+                    (DateTime.Now.Year - res.Birthday.Year) == age &&
+                    (res.Occupation == occu))
                 {
-                    if (!(res.FirstName == fName) &&
-                         (DateTime.Now.Year - res.Birthday.Year) == age &&
-                         (res.Occupation == occu))
-                        continue;
-
-                    foreach (var resId in res.Residencelds)
-                        if (resId == property.OwnerId)
-                            return 1;
-
-                    res.Add(property.OwnerId);
-                    return 0;
-                }
-            }
-            return 2;
-        }
-
-        // return option: true for success; false for not found property
-        private bool RemoveResidentFromProperty(Community comm, string fName, ushort age, string occu, string stAddr)
-        {
-            foreach (var property in comm.Props)
-            {
-                if (property.StreetAddr != stAddr) continue;
-
-                foreach (var res in comm.Residents)
-                {
-                    if (!(res.FirstName == fName) &&
-                         (DateTime.Now.Year - res.Birthday.Year) == age &&
-                         (res.Occupation == occu))
-                        continue;
-
-                    foreach (var resId in res.Residencelds)
+                    foreach (var property in currentCommunity.Props)
                     {
-                        if (resId == property.OwnerId)
+                        if (property.StreetAddr == stAddr[0])
                         {
-                            res.Remove(property.OwnerId);
+                            if (property is Apartment)
+                            {
+                                if (((Apartment)property).Unit != stAddr[2]) continue;
+                            }
+
+                            foreach (var resId in res.Residencelds)
+                            {
+                                if (resId == property.Id) return false;
+                            }
+
+                            res.Add(property.Id);
                             return true;
                         }
                     }
-                    break;
                 }
-                break;
+            }
+            return false;
+        }
+
+        // return option: true for success; false for not found property
+        private bool RemoveResidentFromProperty(string fName, ushort age, string occu, string[] stAddr)
+        {
+            foreach (var res in currentCommunity.Residents)
+            {
+                if ((res.FirstName == fName) &&
+                    (DateTime.Now.Year - res.Birthday.Year) == age &&
+                    (res.Occupation == occu))
+                {
+                    foreach (var property in currentCommunity.Props)
+                    {
+                        if (property.StreetAddr == stAddr[0])
+                        {
+                            if (property is Apartment)
+                            {
+                                if (((Apartment)property).Unit != stAddr[2]) continue;
+                            }
+
+                            foreach (var resId in res.Residencelds)
+                            {
+                                if (resId == property.Id)
+                                {
+                                    res.Remove(property.Id);
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return false;
         }
@@ -691,13 +720,55 @@ namespace Assign_2
 
             if (personInfo != null && propertyInfo != null)
             {
-                if (RemoveResidentFromProperty(currentCommunity, personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo[0]))
+                if (RemoveResidentFromProperty(personInfo[0], Convert.ToUInt16(personInfo[1]), personInfo[2], propertyInfo))
                     OutputTextbox.Text = string.Format("Success: {0} no longer resides in the property at {1}", personInfo[0], propertyInfo[0]);
                 else
                     OutputTextbox.Text = string.Format("ERROR: {0} doesn't currently reside at the property at {1}.", personInfo[0], propertyInfo[0]);
             }
             else
                 OutputTextbox.Text = "Please select a person and a property address";
+        }
+
+        private void ResidenceListbox_Click(object sender, EventArgs e)
+        {
+            if (ResidenceListbox.SelectedItem == null)
+                return;
+
+            string[] propertyInfo = SelectedPropertyInfo();
+
+            foreach (var property in currentCommunity.Props)
+            {
+                if (property.StreetAddr != propertyInfo[0]) continue;
+
+                if (property is Apartment)
+                {
+                    if (((Apartment)property).Unit != propertyInfo[2]) continue;
+                }
+
+                foreach (var res in currentCommunity.Residents)
+                {
+                    if (res.Id != property.OwnerId) continue;
+
+                    OutputTextbox.Text = "Residents live at " + propertyInfo[0] + ((DekalbRadioButton.Checked) ? ", Dekalb" : ", Sycamore") +
+                                         ", owned by " + res.FullName + ":\n";
+                    OutputTextbox.AppendText("-------------------------------------------------------------------------------\n");
+                    
+                 
+
+                    break;
+                }
+                foreach (var res in currentCommunity.Residents)
+                {
+                    foreach (var resId in res.Residencelds)
+                    {
+                        if (resId != property.Id) continue;
+
+                        OutputTextbox.AppendText(string.Format("{0}\t{1}\t{2}\n", res.FullName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
+                    }
+
+                }
+                break;
+            }
         }
     }
 }
