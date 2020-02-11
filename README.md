@@ -7,14 +7,14 @@ Parts finished:
 - [ ] Selecting a Residence
 - [X] Listing 8768 Pinecrest Rd. for sale
 - [X] Alan Turing then buying that property.
-- [ ] Confirmation of the new Owner
+- [X] Confirmation of the new Owner
 - [X] Failing to buy a not-ForSale property
 - [X] Failing to buy an already owned property
 - [X] Alan Turing moving into 8768 Pinecrest Rd.
-- [ ] Confirmation of new residency
+- [X] Confirmation of new residency
 - [X] Failing to move into already residing residence
 - [X] Alan Turing moving out of 8768 Pinecrest Rd. (see his TwitLonger for an explanation. Major drama!)
-- [ ] Confirmation of vacancy
+- [X] Confirmation of vacancy
 - [X] Failing to move out of residence, where he doesn't reside
 
 Adding a new resident:
