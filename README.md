@@ -15,7 +15,7 @@ Parts finished:
 - [ ] Failing to move into already residing residence
 - [ ] Alan Turing moving out of 8768 Pinecrest Rd. (see his TwitLonger for an explanation. Major drama!)
 - [ ] Confirmation of vacancy
-- [ ] Failing to move out of residence, where he doesn't reside
+- [X] Failing to move out of residence, where he doesn't reside
 
 Adding a new resident:
 - [X] Before specifying a Community
