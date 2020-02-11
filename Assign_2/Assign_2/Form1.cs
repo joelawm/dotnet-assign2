@@ -60,7 +60,8 @@ namespace Assign_2
                         ResidenceListbox.Items.Add(String.Format("{0}  #  {1}", property.StreetAddr, ((Apartment)property).Unit));
 
             OutputTextbox.Clear();
-            DisplayResidentAmounts(comm);
+            //Display message
+            OutputTextbox.Text = "The residents and properties of " + comm.Name + " are now listed.";
         }
 
         private void ForSaleButton_Click(object sender, EventArgs e)
@@ -178,12 +179,20 @@ namespace Assign_2
 
         private void Dropdown_Preview(object sender, EventArgs e)
         {
-            DisplayResidenceDropdown(currentCommunity);
+            OutputTextbox.Clear();
+            //print out
+            DisplayResidentAmounts(DekalbCommunity);
+            DisplayResidentAmounts(SycamoreCommunity);
+
+            if(DekalbRadioButton.Checked == true || SycamoreRadioButton.Checked == true)
+            {
+                DisplayResidenceDropdown(currentCommunity);
+            }
         }
 
         private void DisplayResidentAmounts(Community comm)
         {
-            OutputTextbox.Text += "There are " + currentCommunity.Population + " people living in " + comm.Name + "." + Environment.NewLine;
+            OutputTextbox.Text += "There are " + comm.Population + " people living in " + comm.Name + "." + Environment.NewLine;
         }
 
         private void DisplayResidenceDropdown(Community comm)
