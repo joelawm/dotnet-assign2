@@ -64,6 +64,34 @@ namespace Assign_2
             OutputTextbox.Text = "The residents and properties of " + comm.Name + " are now listed.";
         }
 
+        //This fucntion refresh the list box contents without overwriting the messages..... Probably a much better way to this but its 12am
+        private void CommunityListShowingRefresh(Community comm)
+        {
+            ComunityListBoxClear();
+
+            foreach (var res in comm.Residents)
+                PersonListbox.Items.Add(String.Format("{0}\t{1}\t{2}", res.FirstName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
+
+            ResidenceListbox.Items.Add("House");
+            ResidenceListbox.Items.Add("-----------------");
+            foreach (var property in comm.Props)
+                if (property as House != null)
+                    if (property.ForSale)
+                        ResidenceListbox.Items.Add(String.Format("{0}  *", property.StreetAddr));
+                    else
+                        ResidenceListbox.Items.Add(String.Format("{0}", property.StreetAddr));
+
+            ResidenceListbox.Items.Add("");
+            ResidenceListbox.Items.Add("Apartment");
+            ResidenceListbox.Items.Add("-----------------");
+            foreach (var property in comm.Props)
+                if (property as Apartment != null)
+                    if (property.ForSale)
+                        ResidenceListbox.Items.Add(String.Format("{0}  #  {1}  *", property.StreetAddr, ((Apartment)property).Unit));
+                    else
+                        ResidenceListbox.Items.Add(String.Format("{0}  #  {1}", property.StreetAddr, ((Apartment)property).Unit));
+        }
+
         private void ForSaleButton_Click(object sender, EventArgs e)
         {
             if (ResidenceListbox.SelectedItem != null)
@@ -195,21 +223,14 @@ namespace Assign_2
 
         private void Dropdown_Preview(object sender, EventArgs e)
         {
-            if (!(DekalbRadioButton.Checked || SycamoreRadioButton.Checked))
-            {
-                MessageBox.Show("Please, pick a community first");
-            }
-            else
-            {
-                OutputTextbox.Clear();
-                //print out
-                DisplayResidentAmounts(DekalbCommunity);
-                DisplayResidentAmounts(SycamoreCommunity);
+            OutputTextbox.Clear();
+            //print out
+            DisplayResidentAmounts(DekalbCommunity);
+            DisplayResidentAmounts(SycamoreCommunity);
 
-                if (DekalbRadioButton.Checked == true || SycamoreRadioButton.Checked == true)
-                {
-                    DisplayResidenceDropdown(currentCommunity);
-                }
+            if (DekalbRadioButton.Checked == true || SycamoreRadioButton.Checked == true)
+            {
+                DisplayResidenceDropdown(currentCommunity);
             }
         }
 
@@ -362,12 +383,8 @@ namespace Assign_2
 
                                     comm.Residents.Add(new Person(id, dt, lName, fName, occ, resId));
                                     OutputTextbox.Text += "Success! " + fName + " has been added as a resident to " + comm.Name + Environment.NewLine;
+                                    CommunityListShowingRefresh(currentCommunity);
                                     added = true;
-
-                                    //clear listbox
-                                    PersonListbox.Items.Clear();
-                                    //Refresh the residence list
-                                    CommunityListShowing(comm);
                                     break;
                                 }
                             }
@@ -417,13 +434,14 @@ namespace Assign_2
         private void GAddPropertyButton_Click(object sender, EventArgs e)
         {
             //clear the output textbox
-
             OutputTextbox.Clear();
-            bool IsOk = true;
 
             //can add error checking here if need be
-
-            if (IsOk == true)
+            if (!(DekalbRadioButton.Checked || SycamoreRadioButton.Checked))
+            {
+                MessageBox.Show("Please, pick a community first");
+            }
+            else
             {
                 //add function
                 AddAProperty(currentCommunity);
@@ -502,11 +520,8 @@ namespace Assign_2
 
                         House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
                         comm.Props.Add(house);
-
-                        //clear listbox
-                        PersonListbox.Items.Clear();
-                        //Refresh the residence list
-                        CommunityListShowing(comm);
+                        OutputTextbox.Text += "Success! A new property at " + stAddr + " has been added to " + comm.Name + "!" + Environment.NewLine;
+                        CommunityListShowingRefresh(currentCommunity);
                     }
                     else
                     {
@@ -515,11 +530,8 @@ namespace Assign_2
 
                         Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
                         comm.Props.Add(apartment);
-
-                        //clear listbox
-                        PersonListbox.Items.Clear();
-                        //Refresh the residence list
-                        CommunityListShowing(comm);
+                        OutputTextbox.Text += "Success! A new property at " + stAddr + " has been added to " + comm.Name + "!" + Environment.NewLine;
+                        CommunityListShowingRefresh(currentCommunity);
                     }
                 }
             }
@@ -750,8 +762,8 @@ namespace Assign_2
                     if (res.Id != property.OwnerId) continue;
 
                     OutputTextbox.Text = "Residents live at " + propertyInfo[0] + ((DekalbRadioButton.Checked) ? ", Dekalb" : ", Sycamore") +
-                                         ", owned by " + res.FullName + ":\n";
-                    OutputTextbox.AppendText("-------------------------------------------------------------------------------\n");
+                                         ", owned by " + res.FullName + ":" + Environment.NewLine;
+                    OutputTextbox.AppendText("-------------------------------------------------------------------------------" + Environment.NewLine);
                     
                  
 
@@ -763,7 +775,7 @@ namespace Assign_2
                     {
                         if (resId != property.Id) continue;
 
-                        OutputTextbox.AppendText(string.Format("{0}\t{1}\t{2}\n", res.FullName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
+                        OutputTextbox.AppendText(string.Format("\n{0}\t{1}\t{2}\n" + Environment.NewLine, res.FullName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
                     }
 
                 }
