@@ -25,11 +25,11 @@ Adding a new resident:
 - [X] Birthday in the future?
 - [X] Didn't specify a residence
 - [X] Success!
-- [ ] Residence confirmation
+- [X] Residence confirmation
 
 Adding a New Property:
-- [ ] Adding in 1122 Slacker Rd. Because I haven't shoe-horned Slacker into this assignment yet.
+- [X] Adding in 1122 Slacker Rd. Because I haven't shoe-horned Slacker into this assignment yet.
 - [ ] Viewing the new Property. Note: There is no Owner, and the Property is listed as For-Sale. This is default.
 - [X] Specifying a new Apartment
-- [ ] Seeing the new Apartment being listed
+- [X] Seeing the new Apartment being listed
 - [X] The only time you should see the AttachedGarage checkbox
