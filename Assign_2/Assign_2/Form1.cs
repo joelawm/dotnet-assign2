@@ -283,7 +283,7 @@ namespace Assign_2
         //output the amount of residents
         private void DisplayResidentAmounts(Community comm)
         {
-            OutputTextbox.Text += "There are " + comm.Population + " people living in " + comm.Name + "." + Environment.NewLine;
+            OutputTextbox.AppendText("There are " + comm.Population + " people living in " + comm.Name + "." + Environment.NewLine);
         }
 
 
@@ -315,7 +315,7 @@ namespace Assign_2
             //check if the name texbox is empty
             if (String.IsNullOrEmpty(NameTextbox.Text))
             {
-                OutputTextbox.Text += "ERROR: Please enter a name for this resident." + Environment.NewLine;
+                OutputTextbox.AppendText("ERROR: Please enter a name for this resident." + Environment.NewLine);
                 IsOk = false;
             }
 
@@ -323,14 +323,14 @@ namespace Assign_2
             string ischecked = NameTextbox.Text.ToString();
             if (ischecked.Contains(" ") == false)
             {
-                OutputTextbox.Text += "ERROR: You need a space in between the first and the last name." + Environment.NewLine;
+                OutputTextbox.AppendText("ERROR: You need a space in between the first and the last name." + Environment.NewLine);
                 IsOk = false;
             }
 
             //check if the Occupation textbox is empty
             if (String.IsNullOrEmpty(OccupationTextbox.Text))
             {
-                OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." + Environment.NewLine;
+                OutputTextbox.AppendText("ERROR: Please enter a occupation for this resident." + Environment.NewLine);
                 IsOk = false;
             }
 
@@ -339,25 +339,29 @@ namespace Assign_2
             int result = DateTime.Compare(dateselected, DateTime.Now);
             if (result > 0)
             {
-                OutputTextbox.Text += "ERROR: Birthdays cannot be defined from future dates." + Environment.NewLine;
+                OutputTextbox.AppendText("ERROR: Birthdays cannot be defined from future dates." + Environment.NewLine);
                 IsOk = false;
             }
 
             //check if the residence combobox is empty
             if (string.IsNullOrEmpty(ResidenceCombobox.Text))
             {
-                OutputTextbox.Text += "ERROR: Please select a residence for this new resident to reside at." + Environment.NewLine;
+                OutputTextbox.AppendText("ERROR: Please select a residence for this new resident to reside at." + Environment.NewLine);
                 IsOk = false;
             }
 
             //check for invalid text in combobox
             if (ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
             {
-                OutputTextbox.Text += "ERROR: Please select a valid item in the combobox." + Environment.NewLine;
+                OutputTextbox.AppendText("ERROR: Please select a valid item in the combobox." + Environment.NewLine);
                 IsOk = false;
             }
 
-            if (IsOk == true)
+            if (FindPersonId(currentCommunity, NameTextbox.Text.Split(' ')[0], (ushort)(DateTime.Now.Year - dateselected.Year), OccupationTextbox.Text) != 99999)
+            {
+                OutputTextbox.Text = string.Format("{0} already exist.", NameTextbox.Text);
+            }
+            else
             {
                 ComunityListBoxClear();
                 //add function
@@ -419,7 +423,7 @@ namespace Assign_2
                                     if (e == property.Id)
                                     {
                                         //output
-                                        OutputTextbox.Text += "You are already a resident here" + Environment.NewLine;
+                                        OutputTextbox.AppendText("You are already a resident here" + Environment.NewLine);
                                         isFound = true;
                                         break;
                                     }
@@ -432,7 +436,7 @@ namespace Assign_2
                                     var resId = property.Id.ToString();
 
                                     comm.Residents.Add(new Person(id, dt, lName, fName, occ, resId));
-                                    OutputTextbox.Text += "Success! " + fName + " has been added as a resident to " + comm.Name + Environment.NewLine;
+                                    OutputTextbox.AppendText("Success! " + fName + " has been added as a resident to " + comm.Name + Environment.NewLine);
                                     CommunityListShowingRefresh(currentCommunity);
                                     added = true;
                                     SnapPerson();
@@ -490,15 +494,22 @@ namespace Assign_2
             //clear the output textbox
             OutputTextbox.Clear();
 
-            //can add error checking here if need be
-            if (!(DekalbRadioButton.Checked || SycamoreRadioButton.Checked))
+            //error checking
+            if(string.IsNullOrEmpty(StreetAddressTextbox.Text))
             {
-                MessageBox.Show("Please, pick a community first");
+                OutputTextbox.AppendText("Please, enter the street name for the new property.");
             }
             else
             {
-                //add function
-                AddAProperty(currentCommunity);
+                if (!(DekalbRadioButton.Checked || SycamoreRadioButton.Checked))
+                {
+                    MessageBox.Show("Please, pick a community first");
+                }
+                else
+                {
+                    //add function
+                    AddAProperty(currentCommunity);
+                }
             }
         }
 
@@ -574,7 +585,7 @@ namespace Assign_2
 
                         House house = new House(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, garage, aGarage, floor);
                         comm.Props.Add(house);
-                        OutputTextbox.Text += "Success! A new property at " + stAddr + " has been added to " + comm.Name + "!" + Environment.NewLine;
+                        OutputTextbox.AppendText("Success! A new property at " + stAddr + " has been added to " + comm.Name + "!" + Environment.NewLine);
                         CommunityListShowingRefresh(currentCommunity);
                         //clear everything
                         SnapProperty();
@@ -586,7 +597,7 @@ namespace Assign_2
 
                         Apartment apartment = new Apartment(id, x, y, oId, stAddr, city, state, zip, forSale, bedRoom, bath, sqft, unit);
                         comm.Props.Add(apartment);
-                        OutputTextbox.Text += "Success! A new property at " + stAddr + " has been added to " + comm.Name + "!" + Environment.NewLine;
+                        OutputTextbox.AppendText("Success! A new property at " + stAddr + " has been added to " + comm.Name + "!" + Environment.NewLine);
                         CommunityListShowingRefresh(currentCommunity);
                         //clear everything
                         SnapProperty();
@@ -703,17 +714,16 @@ namespace Assign_2
                 //if person does nto exists
                 if (res.Id != personId) continue;
 
-                //check if ids match
+                //cehck if the person already owns the property
                 if (res.Id == propertyId)
                 {
                     return false;
                 }
                 else
                 {
-                    //dont list for sale
                     foreach (var property in comm.Props)
                     {
-                        if (property.Id != propertyId) continue;
+                        if (property.OwnerId != propertyId) continue;
                         property.ForSale = false;
                         property.OwnerId = res.Id;
                     }
@@ -880,9 +890,9 @@ namespace Assign_2
                 }
 
                 //output
-                OutputTextbox.Text += "Residents live at " + propertyInfo[0] + ((DekalbRadioButton.Checked) ? ", Dekalb" : ", Sycamore");
+                OutputTextbox.AppendText("Residents live at " + propertyInfo[0] + ((DekalbRadioButton.Checked) ? ", Dekalb" : ", Sycamore"));
 
-                string name = "";
+                string name = ""; //blank if no one
 
                 //check the residentsd
                 foreach (var res in currentCommunity.Residents)
@@ -904,14 +914,14 @@ namespace Assign_2
                         if (resId != property.Id) continue;
 
                         //output each name
-                        OutputTextbox.Text += res.LastName + ", " + res.FirstName + "\t\t" + (DateTime.Now.Year - res.Birthday.Year) + "\t\t"+  res.Occupation + Environment.NewLine;
+                        OutputTextbox.AppendText(res.LastName + ", " + res.FirstName + "\t\t" + (DateTime.Now.Year - res.Birthday.Year) + "\t\t"+  res.Occupation + Environment.NewLine);
                     }
 
                 }
                 break;
             }
             //final output
-            OutputTextbox.Text += Environment.NewLine;
+            OutputTextbox.AppendText(Environment.NewLine);
             OutputTextbox.AppendText(String.Format("### END OUTPUT ###"));
         }
     }
