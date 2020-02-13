@@ -29,7 +29,7 @@ Adding a new resident:
 
 Adding a New Property:
 - [X] Adding in 1122 Slacker Rd. Because I haven't shoe-horned Slacker into this assignment yet.
-- [ ] Viewing the new Property. Note: There is no Owner, and the Property is listed as For-Sale. This is default.
+- [X] Viewing the new Property. Note: There is no Owner, and the Property is listed as For-Sale. This is default.
 - [X] Specifying a new Apartment
 - [X] Seeing the new Apartment being listed
 - [X] The only time you should see the AttachedGarage checkbox
