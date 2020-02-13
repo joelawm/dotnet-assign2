@@ -197,7 +197,8 @@ namespace Assign_2
         {
             if (!(DekalbRadioButton.Checked || SycamoreRadioButton.Checked))
             {
-                MessageBox.Show("Please, pick a community first");
+                OutputTextbox.Text = "Please, pick a community first";
+                return;
             }
             else
             {
@@ -239,13 +240,12 @@ namespace Assign_2
         {
             //clear the output textbox
             OutputTextbox.Clear();
-            bool IsOk = true;
 
             //check if the name texbox is empty
             if (String.IsNullOrEmpty(NameTextbox.Text))
             {
                 OutputTextbox.Text += "ERROR: Please enter a name for this resident." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //check for a space in the name
@@ -253,14 +253,14 @@ namespace Assign_2
             if (ischecked.Contains(" ") == false)
             {
                 OutputTextbox.Text += "ERROR: You need a space in between the first and the last name." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //check if the Occupation textbox is empty
             if (String.IsNullOrEmpty(OccupationTextbox.Text))
             {
                 OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //compare datetimes
@@ -269,29 +269,32 @@ namespace Assign_2
             if (result > 0)
             {
                 OutputTextbox.Text += "ERROR: Birthdays cannot be defined from future dates." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //check if the residence combobox is empty
             if (string.IsNullOrEmpty(ResidenceCombobox.Text))
             {
                 OutputTextbox.Text += "ERROR: Please select a residence for this new resident to reside at." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //check for invalid text in combobox
             if (ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
             {
                 OutputTextbox.Text += "ERROR: Please select a valid item in the combobox." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
-            if (IsOk == true)
+            if (FindPersonId(currentCommunity, NameTextbox.Text.Split(' ')[0], (ushort)(DateTime.Now.Year - dateselected.Year), OccupationTextbox.Text) != 99999)
             {
-                ComunityListBoxClear();
-                //add function
-                AddToProperty(currentCommunity);
+                OutputTextbox.Text = string.Format("{0} already exist.", NameTextbox.Text);
+                return;
             }
+            
+            ComunityListBoxClear();
+            //add function
+            AddToProperty(currentCommunity);
         }
 
         private void AddToProperty(Community comm)
