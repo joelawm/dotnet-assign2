@@ -268,10 +268,17 @@ namespace Assign_2
         //before drop down is hit
         private void Dropdown_Preview(object sender, EventArgs e)
         {
-            OutputTextbox.Clear();
-            //print out
-            DisplayResidentAmounts(DekalbCommunity);
-            DisplayResidentAmounts(SycamoreCommunity);
+            if (!(DekalbRadioButton.Checked || SycamoreRadioButton.Checked))
+            {
+                OutputTextbox.Text = "Please, pick a community first";
+                return;
+            }
+            else
+            {
+                OutputTextbox.Clear();
+                //print out
+                DisplayResidentAmounts(DekalbCommunity);
+                DisplayResidentAmounts(SycamoreCommunity);
 
             //if community it clicked then display
             if (DekalbRadioButton.Checked == true || SycamoreRadioButton.Checked == true)
@@ -310,13 +317,12 @@ namespace Assign_2
         {
             //clear the output textbox
             OutputTextbox.Clear();
-            bool IsOk = true;
 
             //check if the name texbox is empty
             if (String.IsNullOrEmpty(NameTextbox.Text))
             {
                 OutputTextbox.Text += "ERROR: Please enter a name for this resident." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //check for a space in the name
@@ -324,14 +330,14 @@ namespace Assign_2
             if (ischecked.Contains(" ") == false)
             {
                 OutputTextbox.Text += "ERROR: You need a space in between the first and the last name." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //check if the Occupation textbox is empty
             if (String.IsNullOrEmpty(OccupationTextbox.Text))
             {
                 OutputTextbox.Text += "ERROR: Please enter a occupation for this resident." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //compare datetimes
@@ -340,29 +346,32 @@ namespace Assign_2
             if (result > 0)
             {
                 OutputTextbox.Text += "ERROR: Birthdays cannot be defined from future dates." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //check if the residence combobox is empty
             if (string.IsNullOrEmpty(ResidenceCombobox.Text))
             {
                 OutputTextbox.Text += "ERROR: Please select a residence for this new resident to reside at." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
             //check for invalid text in combobox
             if (ResidenceCombobox.Text.Contains("House") == true || ResidenceCombobox.Text.Contains("Apartment") == true || ResidenceCombobox.Text.Contains("-----------------") == true)
             {
                 OutputTextbox.Text += "ERROR: Please select a valid item in the combobox." + Environment.NewLine;
-                IsOk = false;
+                return;
             }
 
-            if (IsOk == true)
+            if (FindPersonId(currentCommunity, NameTextbox.Text.Split(' ')[0], (ushort)(DateTime.Now.Year - dateselected.Year), OccupationTextbox.Text) != 99999)
             {
-                ComunityListBoxClear();
-                //add function
-                AddToProperty(currentCommunity);
+                OutputTextbox.Text = string.Format("{0} already exist.", NameTextbox.Text);
+                return;
             }
+            
+            ComunityListBoxClear();
+            //add function
+            AddToProperty(currentCommunity);
         }
 
         private void AddToProperty(Community comm)
@@ -487,6 +496,19 @@ namespace Assign_2
 
         private void GAddPropertyButton_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(StreetAddressTextbox.Text))
+            {
+                OutputTextbox.Text = "Please, enter the street name for the new property.";
+                return;
+            }
+
+            foreach (var property in currentCommunity.Props)
+            {
+                if (property.StreetAddr != StreetAddressTextbox.Text) continue;
+                OutputTextbox.Text = string.Format("Property, \"{0}\", is already exisit.", StreetAddressTextbox.Text);
+                return;
+            }
+
             //clear the output textbox
             OutputTextbox.Clear();
 
@@ -871,7 +893,7 @@ namespace Assign_2
             //each property
             foreach (var property in currentCommunity.Props)
             {
-                //if not equal
+                OutputTextbox.Text = "";
                 if (property.StreetAddr != propertyInfo[0]) continue;
 
                 if (property is Apartment)
@@ -882,7 +904,7 @@ namespace Assign_2
                 //output
                 OutputTextbox.Text += "Residents live at " + propertyInfo[0] + ((DekalbRadioButton.Checked) ? ", Dekalb" : ", Sycamore");
 
-                string name = "";
+                string name = "N/A";
 
                 //check the residentsd
                 foreach (var res in currentCommunity.Residents)
@@ -902,16 +924,15 @@ namespace Assign_2
                     foreach (var resId in res.Residencelds)
                     {
                         if (resId != property.Id) continue;
-
-                        //output each name
-                        OutputTextbox.Text += res.LastName + ", " + res.FirstName + "\t\t" + (DateTime.Now.Year - res.Birthday.Year) + "\t\t"+  res.Occupation + Environment.NewLine;
+                        OutputTextbox.AppendText(string.Format("{0}\t{1}\t{2}", res.FullName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
+                        OutputTextbox.AppendText(Environment.NewLine);
                     }
 
                 }
                 break;
             }
             //final output
-            OutputTextbox.Text += Environment.NewLine;
+            OutputTextbox.AppendText(Environment.NewLine);
             OutputTextbox.AppendText(String.Format("### END OUTPUT ###"));
         }
     }
