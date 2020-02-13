@@ -416,6 +416,19 @@ namespace Assign_2
 
         private void GAddPropertyButton_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(StreetAddressTextbox.Text))
+            {
+                OutputTextbox.Text = "Please, enter the street name for the new property.";
+                return;
+            }
+
+            foreach (var property in currentCommunity.Props)
+            {
+                if (property.StreetAddr != StreetAddressTextbox.Text) continue;
+                OutputTextbox.Text = string.Format("Property, \"{0}\", is already exisit.", StreetAddressTextbox.Text);
+                return;
+            }
+
             //clear the output textbox
 
             OutputTextbox.Clear();
@@ -519,7 +532,7 @@ namespace Assign_2
                         //clear listbox
                         PersonListbox.Items.Clear();
                         //Refresh the residence list
-                        CommunityListShowing(comm);
+                        UpdateCommunity(comm);
                     }
                 }
             }
