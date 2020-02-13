@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assign_2
 {
+    //person class
     public class Person : IComparable
     {
         //variables
