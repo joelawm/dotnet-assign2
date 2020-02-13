@@ -784,12 +784,16 @@ namespace Assign_2
                     {
                         if (resId != property.Id) continue;
 
-                        OutputTextbox.AppendText(string.Format("{0}\t{1}\t{2}\n", res.FullName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
+                        OutputTextbox.AppendText(string.Format("{0}\t{1}\t{2}", res.FullName, (DateTime.Now.Year - res.Birthday.Year), res.Occupation));
+                        OutputTextbox.AppendText(Environment.NewLine);
                     }
 
                 }
                 break;
             }
+            //final output
+            OutputTextbox.AppendText(Environment.NewLine);
+            OutputTextbox.AppendText(String.Format("### END OUTPUT ###"));
         }
     }
 }
