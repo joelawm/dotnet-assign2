@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assign_2
 {
+    //community class
     public class Community : IComparable, IEnumerable
     {
         private readonly uint _id;

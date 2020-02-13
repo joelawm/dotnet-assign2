@@ -7,6 +7,7 @@ namespace Assign_2
         private const string DekalbHouseFile = "../../dr.txt";
         private const string DekalbApartmentFile = "../../da.txt";
 
+        //set the comunity to active
         public Community ActiveDekalb_Files()
         {
             ActiveCommunity active = new ActiveCommunity();

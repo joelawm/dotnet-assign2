@@ -4,17 +4,17 @@ Assignment 2 for dot net
 Parts finished:
 - [X] Selecting a Community
 - [X] Selecting Sycamore's Mayor, Alan Turing. Note his dual residence.
-- [ ] Selecting a Residence
+- [X] Selecting a Residence
 - [X] Listing 8768 Pinecrest Rd. for sale
 - [X] Alan Turing then buying that property.
-- [ ] Confirmation of the new Owner
+- [X] Confirmation of the new Owner
 - [X] Failing to buy a not-ForSale property
 - [X] Failing to buy an already owned property
 - [X] Alan Turing moving into 8768 Pinecrest Rd.
-- [ ] Confirmation of new residency
+- [X] Confirmation of new residency
 - [X] Failing to move into already residing residence
 - [X] Alan Turing moving out of 8768 Pinecrest Rd. (see his TwitLonger for an explanation. Major drama!)
-- [ ] Confirmation of vacancy
+- [X] Confirmation of vacancy
 - [X] Failing to move out of residence, where he doesn't reside
 
 Adding a new resident:
@@ -25,11 +25,11 @@ Adding a new resident:
 - [X] Birthday in the future?
 - [X] Didn't specify a residence
 - [X] Success!
-- [ ] Residence confirmation
+- [X] Residence confirmation
 
 Adding a New Property:
-- [ ] Adding in 1122 Slacker Rd. Because I haven't shoe-horned Slacker into this assignment yet.
-- [ ] Viewing the new Property. Note: There is no Owner, and the Property is listed as For-Sale. This is default.
+- [X] Adding in 1122 Slacker Rd. Because I haven't shoe-horned Slacker into this assignment yet.
+- [X] Viewing the new Property. Note: There is no Owner, and the Property is listed as For-Sale. This is default.
 - [X] Specifying a new Apartment
-- [ ] Seeing the new Apartment being listed
+- [X] Seeing the new Apartment being listed
 - [X] The only time you should see the AttachedGarage checkbox

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assign_2
 {
+    //residential class
     public class Residential : Property
     {
         //variables
