@@ -751,6 +751,8 @@ namespace Assign_2
 
             foreach (var property in currentCommunity.Props)
             {
+                OutputTextbox.Text = "";
+
                 if (property.StreetAddr != propertyInfo[0]) continue;
 
                 if (property is Apartment)
@@ -758,18 +760,24 @@ namespace Assign_2
                     if (((Apartment)property).Unit != propertyInfo[2]) continue;
                 }
 
+                //output
+                OutputTextbox.Text += "Residents live at " + propertyInfo[0] + ((DekalbRadioButton.Checked) ? ", Dekalb" : ", Sycamore");
+
+                string name = "N/A";
+
+                //check the residentsd
                 foreach (var res in currentCommunity.Residents)
                 {
                     if (res.Id != property.OwnerId) continue;
 
-                    OutputTextbox.Text = "Residents live at " + propertyInfo[0] + ((DekalbRadioButton.Checked) ? ", Dekalb" : ", Sycamore") +
-                                         ", owned by " + res.FullName + ":\n";
-                    OutputTextbox.AppendText("-------------------------------------------------------------------------------\n");
-                    
-                 
-
+                    name = res.LastName + ", " + res.FirstName;
                     break;
                 }
+
+                //output before
+                OutputTextbox.AppendText(", owned by " + name + ":" + Environment.NewLine);
+                OutputTextbox.AppendText("------------------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+
                 foreach (var res in currentCommunity.Residents)
                 {
                     foreach (var resId in res.Residencelds)
