@@ -432,11 +432,14 @@ namespace Assign_2
             //clear the output textbox
 
             OutputTextbox.Clear();
-            bool IsOk = true;
 
             //can add error checking here if need be
 
-            if (IsOk == true)
+            if (!(DekalbRadioButton.Checked || SycamoreRadioButton.Checked))
+            {
+                MessageBox.Show("Please, pick a community first");
+            }
+            else
             {
                 //add function
                 AddAProperty(currentCommunity);
