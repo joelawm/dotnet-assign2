@@ -356,16 +356,18 @@ namespace Assign_2
                 OutputTextbox.AppendText("ERROR: Please select a valid item in the combobox." + Environment.NewLine);
                 IsOk = false;
             }
-
-            if (FindPersonId(currentCommunity, NameTextbox.Text.Split(' ')[0], (ushort)(DateTime.Now.Year - dateselected.Year), OccupationTextbox.Text) != 99999)
+            if(IsOk)
             {
-                OutputTextbox.Text = string.Format("{0} already exist.", NameTextbox.Text);
-            }
-            else
-            {
-                ComunityListBoxClear();
-                //add function
-                AddToProperty(currentCommunity);
+                if (FindPersonId(currentCommunity, NameTextbox.Text.Split(' ')[0], (ushort)(DateTime.Now.Year - dateselected.Year), OccupationTextbox.Text) != 99999)
+                {
+                    OutputTextbox.Text = string.Format("{0} already exist.", NameTextbox.Text);
+                }
+                else
+                {
+                    ComunityListBoxClear();
+                    //add function
+                    AddToProperty(currentCommunity);
+                }
             }
         }
 
@@ -654,7 +656,7 @@ namespace Assign_2
                 //make sure its for sale
                 if (!forSaleCheck)
                 {
-                    OutputTextbox.Text = "ERROR: Could not purchase the property at" + propertyInfo[0] + ", as it is not list for sale.";
+                    OutputTextbox.Text = "ERROR: Could not purchase the property at " + propertyInfo[0] + ", as it is not list for sale.";
                 }
                 else
                 {
